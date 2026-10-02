@@ -1,0 +1,604 @@
+/* The owner's app (/eivor-account-demo/account/), part O4a, 30 Sep 2026.
+   Confidence's design system (critique-clone/FRONTEND-DESIGN-SPEC.md sections 1, 2, 4,
+   5 and 6: the ten rules, the type scale, space, radius, breakpoints and components),
+   in the receptionist site's own colours. Every colour here is one of site.css's
+   tokens (--ink, --sig, --tint, --muted, --rule and white), or a mix of two of them.
+   Two changes from Confidence, both for the site's rules: no text under 16 px, and
+   every tap at least 44 px. Loaded after site.css, which gives the tokens and Archivo.
+
+   The ten rules, as they apply here:
+   1 no lines: tiles sit on the page tone with a 6px gap; rows are told apart by tone.
+   2 everything is a tile, never a tile inside a tile.   3 one accent: canary marks
+   "now", "today", "urgent" and the current tab; ink is the primary button.
+   4 three voices: condensed Archivo for headings, numbers and buttons; Plex Mono for
+   labels, dates and status; Archivo for sentences.   5 big numbers stand alone.
+   6 lists are rows in alternating tones.   7 full width.   8 compact.
+   9 calm motion: colour and background only, 160ms.   10 nothing that looks AI-made. */
+
+
+:root{
+  /* D1, the shared look (30 Sep 2026): the values come from Adithya's redesign
+     (site.css). D1 and D2 both use exactly these names. --ink and --muted are
+     site.css's own and are not set again here (#0A1633 and #55617A). */
+  --bg:var(--paper);                 /* the page: cool paper, #F4F6FB */
+  --surface:var(--card);             /* inputs, sheets, the sign-in card: white */
+  --line:var(--rule);                /* thin dividers, #DCE2EE */
+  --accent:var(--blue);              /* buttons, links, the current tab, #2B59FF */
+  --accent-ink:var(--blue-deep);     /* blue text on the page: links, held, the current tab, #1638C9, 7.9:1 */
+  --urgent:var(--sig);               /* yellow means one thing only: urgent, #FFE680 */
+  --urgent-ink:var(--ink);           /* text on urgent, 14:1 */
+  --ok:var(--blue-deep);             /* answering, confirmed, #1638C9 */
+  --radius:12px;
+  --space-1:4px; --space-2:8px; --space-3:16px; --space-4:24px; --space-5:40px;
+  --font-display:"Bricolage","Archivo",ui-sans-serif,system-ui,sans-serif;
+  --font-body:"Archivo",ui-sans-serif,system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --tap:44px;
+
+  /* the older names (O4a), now on the shared values */
+  --t1:var(--surface);
+  --t2:color-mix(in srgb, var(--rule) 40%, #FFFFFF);
+  --t3:var(--rule);
+  --text:var(--ink);
+  --acc:var(--sig);
+  --accbg:var(--blue-soft);
+  --scrim:color-mix(in srgb, var(--ink) 45%, transparent);
+  --cond:var(--font-display);
+  --body:var(--font-body);
+  --mono:var(--font-mono);
+  --g:clamp(16px,3.2vw,56px);
+  --hh:60px;
+  --gap:6px;
+  --r:6px;
+  --bb:0px;
+}
+
+/* ---------------------------------------------------------------- base */
+body.oa{background:var(--bg);color:var(--text);font:400 16px/1.5 var(--body);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+.oa h1,.oa h2,.oa h3{font-weight:inherit;text-wrap:balance}
+.oa :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.oa main{display:grid;gap:var(--gap);padding:0 var(--g) calc(var(--g) + var(--bb));align-content:start;min-width:0}
+.oa .view{display:grid;gap:var(--gap);min-width:0}
+.oa [data-tab]{display:grid;gap:var(--gap);min-width:0}
+html:has(body.oa){scroll-padding-top:calc(var(--hh) + 8px)}
+
+/* the voices */
+.cond{font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase}
+.lbl{font:500 16px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted)}
+.lbl.ink{color:var(--text)}
+.disp{font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase;font-size:clamp(54px,8.4vw,132px);line-height:.86;letter-spacing:-.01em;overflow-wrap:anywhere}
+.h2{font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase;font-size:clamp(32px,3.6vw,56px);line-height:.92;overflow-wrap:anywhere}
+.rank{font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase;font-size:21px;line-height:1.05;letter-spacing:.04em;overflow-wrap:anywhere}
+.stat{font-family:var(--cond);font-stretch:72%;font-weight:700;font-size:clamp(40px,4vw,64px);line-height:.9}
+.stat-s{font-family:var(--cond);font-stretch:72%;font-weight:700;font-size:38px;line-height:1}
+.lede{font-size:clamp(16px,1.3vw,19px);line-height:1.5;color:var(--muted);max-width:34em}
+.mut{color:var(--muted)}
+.data{font:500 16px/1.3 var(--mono)}
+.oa p{max-width:40em}
+
+/* ---------------------------------------------------------------- 6.1 tile */
+.tile{background:var(--t1);border-radius:var(--r);min-width:0;padding:20px 22px}
+.tile.big{padding:clamp(32px,5vw,80px) clamp(20px,3.4vw,56px)}
+.tile.list{padding:4px 8px 10px}
+.tile > * + *{margin-top:14px}
+.tile > .lbl + *{margin-top:8px}
+
+/* rows of tiles */
+.r75{display:grid;gap:var(--gap);grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:start}
+.r75 > .col{display:grid;gap:var(--gap);min-width:0}
+.r3{display:grid;gap:var(--gap);grid-template-columns:repeat(3,minmax(0,1fr))}
+.r2{display:grid;gap:var(--gap);grid-template-columns:repeat(2,minmax(0,1fr))}
+.stretch{align-items:stretch}
+
+/* section head: heading left, one line right */
+.shd{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;padding:28px 4px 8px}
+.shd .lede{max-width:34em}
+
+/* ---------------------------------------------------------------- 6.2 header */
+.hd{position:sticky;top:0;z-index:10;height:var(--hh);background:var(--bg);display:flex;align-items:center;gap:20px;padding:0 var(--g)}
+.hd .mk{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;margin-left:-11px;border-radius:var(--r)}
+.hd .mk img{display:block;width:22px;height:22px}
+.hd .co{font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase;font-size:21px;line-height:1;letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.hd .co:focus{outline:none}
+.hd .line-now{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.hd .line-now::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--acc);box-shadow:inset 0 0 0 2px var(--ink)}
+.hd .line-now.paused::before{background:var(--t1)}
+
+/* ---------------------------------------------------------------- 6.3 segmented nav */
+.seg{display:flex;gap:2px;padding:3px;background:var(--t1);border-radius:var(--r)}
+.seg a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:4px;font-family:var(--cond);font-stretch:72%;font-weight:600;font-size:16px;line-height:1;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:color .16s ease-out,background-color .16s ease-out}
+.seg a:hover{color:var(--text);background:var(--t2)}
+.seg a[aria-current="page"]{color:var(--text);background:var(--acc)}
+
+/* ---------------------------------------------------------------- 6.5 bottom bar */
+.bbar{display:none}
+
+/* ---------------------------------------------------------------- 6.6 buttons */
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:44px;padding:0 20px;border:0;border-radius:var(--r);font-family:var(--cond);font-stretch:72%;font-weight:600;font-size:16px;line-height:1;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;cursor:pointer;background:none;color:var(--text);text-decoration:none;transition:color .16s ease-out,background-color .16s ease-out,box-shadow .16s ease-out}
+.bt.p{background:var(--ink);color:#FFFFFF;box-shadow:inset 0 0 0 0 var(--sig)}
+.bt.p:hover{box-shadow:inset 0 -5px 0 0 var(--sig)}
+.bt.s{background:var(--t2)}
+.bt.s:hover{background:var(--t3)}
+.bt.q{color:var(--muted);padding:0 12px}
+.bt.q:hover{color:var(--text)}
+.bt:disabled,.bt[aria-disabled="true"]{background:var(--t2);color:var(--muted);box-shadow:none;cursor:default}
+.bt[aria-busy="true"]{cursor:progress}
+.acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.acts.end{justify-content:flex-end}
+.acts.split{justify-content:space-between}
+.acts.split > .acts{margin-left:auto}
+
+/* text links that are taps (numbers to call) */
+.tel{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;font:500 16px/1.2 var(--mono);color:var(--text);text-decoration:underline 2px var(--ink);text-underline-offset:5px;transition:text-decoration-color .16s ease-out}
+.tel:hover{text-decoration-color:var(--sig)}
+.oa .tl{display:inline-flex;align-items:center;min-height:44px;overflow-wrap:anywhere}
+
+
+/* the three numbers on Today: straight on the greeting tile */
+.greet{display:flex;flex-direction:column}
+.num{display:flex;flex-direction:column;gap:8px;min-width:0}
+.num .stat{display:flex;align-items:center;gap:10px;font-size:clamp(56px,6vw,96px)}
+.num .cap{color:var(--muted);line-height:1.3}
+.num.hot .stat::after{content:"";flex:none;width:14px;height:14px;border-radius:2px;background:var(--acc);box-shadow:inset 0 0 0 2px var(--ink)}
+
+/* ---------------------------------------------------------------- 6.13 status, 6.15 tag */
+.stx{font:500 16px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);white-space:nowrap}
+.stx.on{color:var(--text)}
+.tag{display:inline-flex;align-items:center;padding:3px 7px 2px;border-radius:3px;background:var(--acc);color:var(--ink);font:600 16px/1.1 var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:.12em}
+
+/* ---------------------------------------------------------------- rows (6.12 in tile form) */
+.alt{display:grid}
+.alt > li:nth-child(odd){background:var(--t2)}
+.alt > li{border-radius:4px}
+.alt > li:nth-child(odd) .bt.s{background:var(--t1)}
+.alt > li:nth-child(odd) .bt.s:hover{background:var(--t3)}
+.grp{padding:14px 12px 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* a call row: the whole row opens the call; the number is its own tap */
+.crow{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,3fr) minmax(10em,auto) minmax(10em,auto);gap:4px 18px;align-items:center;padding:10px 12px 10px 18px;cursor:pointer;transition:background-color .16s ease-out}
+.crow:hover{background:var(--t3) !important}
+.crow .nm{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-width:0}
+.opn{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;color:var(--text);text-align:left;cursor:pointer;font-family:var(--cond);font-stretch:72%;font-weight:700;text-transform:uppercase;font-size:21px;line-height:1.05;letter-spacing:.04em;overflow-wrap:anywhere}
+.crow .what{min-width:0;overflow-wrap:anywhere}
+.crow .route{color:var(--muted);display:block}
+.crow .asked{font:500 16px/1.3 var(--mono);color:var(--muted)}
+.crow .stx{text-align:right}
+
+/* ---------------------------------------------------------------- held dates rows */
+.hrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;align-items:center;padding:12px 12px 12px 18px}
+.hrow .when{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.hrow .ask{grid-column:1 / -1;background:var(--accbg);border-radius:4px;padding:14px 16px;display:grid;gap:10px}
+.hrow .ask p{font-weight:600}
+
+/* urgent call tiles on Today */
+.urg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center}
+.urg .nm{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+
+/* ---------------------------------------------------------------- 6.17 checkbox rows */
+.cbx{display:flex;align-items:center;gap:14px;min-height:52px;padding:4px 16px;border-radius:4px;background:var(--t2);cursor:pointer;font-weight:600;transition:background-color .16s ease-out}
+.cbx:hover{background:var(--t3)}
+.cbx input{position:absolute;opacity:0;width:22px;height:22px;margin:0}
+.cbx .box{flex:none;width:22px;height:22px;border-radius:4px;background:var(--t1);box-shadow:inset 0 0 0 2px var(--ink);display:grid;place-items:center;transition:background-color .16s ease-out}
+.cbx .box svg{width:14px;height:14px;opacity:0}
+.cbx input:checked + .box{background:var(--ink)}
+.cbx input:checked + .box svg{opacity:1}
+.cbx input:focus-visible + .box{outline:2px solid var(--ink);outline-offset:3px}
+.cbx{position:relative}
+
+/* ---------------------------------------------------------------- 6.18 inputs */
+.fm{display:grid;gap:8px;max-width:40em}
+.fm label,.fl{display:block;font:500 16px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);margin-top:8px}
+.fm label:first-child{margin-top:0}
+.oa input[type=email],.oa input[type=password],.oa input[type=text],.oa input[type=tel],.oa textarea{display:block;width:100%;min-height:48px;padding:0 16px;border:0;border-radius:var(--r);background:var(--t2);color:var(--text);font:400 16px/1.4 var(--body);transition:background-color .16s ease-out}
+.oa textarea{min-height:120px;padding:12px 16px;resize:vertical}
+.oa input:focus,.oa textarea:focus{background:var(--t3)}
+.oa input::placeholder,.oa textarea::placeholder{color:var(--muted)}
+.hint{color:var(--muted)}
+
+/* 6.23 note line (the page's answers: saved, or what to fix) */
+.say{padding:12px 16px;border-radius:4px;background:var(--accbg);color:var(--text);font:500 16px/1.4 var(--mono)}
+.say.good{background:var(--t2)}
+
+/* ---------------------------------------------------------------- 6.19 choice tiles */
+.choices{display:grid;gap:var(--gap)}
+.choice{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:16px 18px;border-radius:var(--r);background:var(--t2);cursor:pointer;transition:background-color .16s ease-out}
+.choice:hover{background:var(--t3)}
+.choice input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.choice .rank{pointer-events:none}
+.choice .ix{font:500 16px/1 var(--mono);color:var(--muted);pointer-events:none}
+.choice:has(input:checked){background:var(--acc)}
+.choice:has(input:checked) .ix{color:var(--ink)}
+.choice:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
+
+/* ---------------------------------------------------------------- 6.21 chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:0;border-radius:4px;background:var(--t1);color:var(--muted);font:500 16px/1 var(--body);cursor:pointer;transition:color .16s ease-out,background-color .16s ease-out}
+.fchip:hover{color:var(--text)}
+.fchip[aria-pressed="true"]{background:var(--ink);color:#FFFFFF}
+.fchip .n{font:500 16px/1 var(--mono)}
+
+/* ---------------------------------------------------------------- 6.22 toggle */
+.switch{display:inline-flex;align-items:center;gap:14px;min-height:44px;padding:0;border:0;background:none;color:var(--text);font:600 16px/1.3 var(--body);cursor:pointer}
+.switch .track{position:relative;flex:none;width:44px;height:26px;border-radius:4px;background:var(--t3);transition:background-color .16s ease-out}
+.switch .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:3px;background:var(--ink);transition:left .16s ease-out,background-color .16s ease-out}
+.switch[aria-checked="true"] .track{background:var(--ink)}
+.switch[aria-checked="true"] .knob{left:21px;background:var(--acc)}
+
+/* ---------------------------------------------------------------- key-values (the sheet, O2 lists) */
+.kv{display:grid}
+.kv > div{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:4px 16px;padding:12px 14px;border-radius:4px}
+.kv > div:nth-child(odd){background:var(--t2)}
+.kv dt{font:500 16px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted)}
+.kv dd{min-width:0;overflow-wrap:anywhere}
+
+/* ---------------------------------------------------------------- 6.11 progress line (setup) */
+.prog{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;padding:14px 22px}
+.prog .bar{height:6px;border-radius:2px;background:var(--t3);overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--ink);transition:width .6s ease-out}
+
+/* the setup screens: one step, one tile that fills the view */
+.step{min-height:calc(100vh - var(--hh) - 96px);min-height:calc(100dvh - var(--hh) - 96px);display:flex;flex-direction:column;gap:14px}
+.step > *{margin-top:0}
+.step .grow{flex:1 1 auto;display:grid;gap:14px;align-content:start}
+.step .acts.split{margin-top:auto;padding-top:18px}
+.code{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px .5em;font:500 clamp(34px,5vw,56px)/1.15 var(--mono);letter-spacing:.1em}
+.code .ck,.codes .ck{white-space:nowrap}
+.code .ph{font-size:.5em;color:var(--muted);letter-spacing:0}
+.codes{display:grid}
+.codes > div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:10px 14px;border-radius:4px}
+.codes > div:nth-child(odd){background:var(--t2)}
+.codes code{display:flex;flex-wrap:wrap;gap:0 .45em;font:500 21px/1.4 var(--mono);letter-spacing:.08em}
+.steps-l{display:grid;gap:8px;counter-reset:s}
+.steps-l li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px}
+.steps-l li::before{content:counter(s);font:500 16px/1.5 var(--mono);color:var(--muted)}
+
+/* ---------------------------------------------------------------- 6.20 dialog and sheet */
+.scrim{position:fixed;inset:0;z-index:30;background:var(--scrim)}
+.sheet{position:fixed;z-index:31;left:0;right:0;bottom:0;max-height:88vh;max-height:88dvh;overflow:auto;overscroll-behavior:contain;background:var(--t1);border-radius:6px 6px 0 0;padding:18px var(--g) calc(18px + env(safe-area-inset-bottom));display:grid;gap:14px;align-content:start}
+.sheet .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet .top-row .bt.q{margin-right:-12px}
+.sheet .foot-row{position:sticky;bottom:calc(-18px - env(safe-area-inset-bottom));margin:0 calc(-1 * var(--g)) calc(-18px - env(safe-area-inset-bottom));padding:12px var(--g) calc(12px + env(safe-area-inset-bottom));background:var(--t1)}
+
+/* ---------------------------------------------------------------- 6.24 state tiles */
+.empty-t{display:grid;gap:10px;align-content:start}
+.empty-t .h2{max-width:16em}
+.opening{min-height:40vh}
+
+/* ---------------------------------------------------------------- 6.31 calendar (O4b) */
+/* the month: 7 columns of square days, 6px apart, the number top left (6.31); the four
+   marks: held is canary, confirmed is ink, blocked is the rule grey with the number
+   struck, today has an ink ring. Each also says itself in words to a screen reader. */
+.month-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.month-bar .acts{gap:2px;margin-right:-12px}
+.month{display:grid;gap:var(--gap)}
+.month .wk,.month .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--gap)}
+.month .wk span{font:500 16px/1 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);padding:2px 0 0 8px;overflow:hidden}
+.day{aspect-ratio:1;min-height:44px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:8px;border:0;border-radius:4px;background:var(--t2);color:var(--text);font:500 16px/1 var(--mono);text-align:left;cursor:pointer;transition:background-color .16s ease-out,color .16s ease-out}
+.day:hover:not(:disabled){background:var(--t3)}
+.day .w{display:block;max-width:100%;font:500 16px/1.1 var(--mono);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day:disabled{background:none;color:var(--muted);cursor:default}
+.day.held,.day.held:hover:not(:disabled){background:var(--acc)}
+.day.confirmed,.day.confirmed:hover:not(:disabled){background:var(--ink);color:#FFFFFF}
+.day.blocked,.day.blocked:hover:not(:disabled){background:var(--t3);color:var(--muted)}
+.day.blocked .n{text-decoration:line-through 2px}
+.day.no,.day.no:hover:not(:disabled){color:var(--muted)}
+.day.today{box-shadow:inset 0 0 0 3px var(--ink)}
+.day.today.confirmed{box-shadow:inset 0 0 0 3px var(--sig)}
+.key{display:flex;flex-wrap:wrap;gap:6px 22px}
+.key li{display:inline-flex;align-items:center;gap:8px}
+.sw{width:18px;height:18px;border-radius:3px;background:var(--t2)}
+.sw.held{background:var(--acc)}
+.sw.confirmed{background:var(--ink)}
+.sw.blocked{background:var(--t3)}
+.sw.no{color:var(--muted);font:500 16px/18px var(--mono);text-align:center}
+.sw.today{box-shadow:inset 0 0 0 3px var(--ink)}
+.kvn{gap:14px}
+.kvn .kvi{display:grid;gap:6px;min-width:0}
+.copy-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}
+.os-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+.os-steps > div{display:grid;gap:8px;align-content:start}
+.sheet .dayoff{background:var(--t2);border-radius:4px;padding:14px 16px}
+.sheet .hrow{padding-left:14px}
+
+/* ---------------------------------------------------------------- Robot (O4b) */
+.hear{display:flex;flex-direction:column}
+.hear .quote{font-family:var(--cond);font-stretch:72%;font-weight:700;font-size:clamp(32px,3.2vw,38px);line-height:1.05;overflow-wrap:anywhere;max-width:22em}
+.hear .upd{margin-top:auto !important;padding-top:22px;display:grid;gap:4px}
+.shd.sm{padding:22px 4px 2px}
+/* two columns that fill down like a page, so no group leaves a hole beside it */
+.fgroups{columns:2;column-gap:var(--gap)}
+.fgroup{max-width:none;gap:0;break-inside:avoid;margin-bottom:var(--gap)}
+.fgroup > * + *{margin-top:14px}
+.fgroup .fld{display:grid;gap:8px;min-width:0}
+.fgroup .fld label,.fgroup .fld .fl{margin-top:0}
+.fgroup .acts{margin-top:18px}
+.oa [aria-invalid="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+.daysel{display:flex;flex-wrap:wrap;gap:6px}
+.fgroup legend{padding:0;margin:0 0 8px}
+.fm .dchip{margin-top:0;display:inline-flex;font:500 16px/1 var(--mono)}
+.dchip{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:44px;padding:0 12px;border-radius:4px;background:var(--t2);font:500 16px/1 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);cursor:pointer;transition:background-color .16s ease-out,color .16s ease-out}
+.dchip:hover{color:var(--text);background:var(--t3)}
+.dchip input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.dchip:has(input:checked){background:var(--ink);color:#FFFFFF}
+.dchip:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
+
+/* ---------------------------------------------------------------- Profile (O4b) */
+.hs-top{display:grid;grid-template-columns:72px minmax(0,1fr);gap:18px;align-items:center}
+.hs-icon{display:block;width:72px;height:72px;border-radius:16px}
+.ask{background:var(--accbg);border-radius:4px;padding:14px 16px;display:grid;gap:10px}
+.ask p:first-child{font-weight:600}
+
+/* ---------------------------------------------------------------- Today (O4b) */
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap);margin-top:auto !important;padding-top:22px}
+.big-ph{font-size:21px;letter-spacing:.06em;color:var(--muted)}
+.lrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto;gap:4px 18px;align-items:center;padding:6px 12px 6px 18px}
+.lrow .nm{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-width:0}
+.lrow .what{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lrow .stx{text-align:right}
+.line-t .data{color:var(--text)}
+
+/* ---------------------------------------------------------------- breakpoints */
+@media (max-width:1100px){
+  .r75{grid-template-columns:minmax(0,1fr)}
+  /* stacked, the coming dates follow the month straight away, then the counts and the link */
+  .calr,.calr > .col{display:contents}
+  #days{order:1} #holds{order:2} .cnt{order:3} #cal-link{order:4}
+  .crow{grid-template-columns:minmax(0,1.3fr) minmax(0,2fr) auto auto}
+}
+@media (min-width:861px){
+  .sheet{left:auto;top:0;bottom:0;width:min(440px,40vw);min-width:380px;max-height:none;border-radius:0;padding:18px 28px 0}
+  .sheet .foot-row{bottom:0;margin:0 -28px;padding:12px 28px 18px}
+}
+@media (max-width:860px){
+  :root{--bb:calc(72px + env(safe-area-inset-bottom))}
+  .fgroups{columns:1}
+  .lrow{grid-template-columns:minmax(0,1fr) auto}
+  .lrow .nm{grid-column:1}
+  .lrow .stx{grid-column:2;grid-row:1}
+  .lrow .what{grid-column:1 / -1}
+  .hd .seg{display:none}
+  .hd{gap:10px}
+  .bbar{display:block;position:fixed;z-index:20;left:0;right:0;bottom:0;background:var(--bg);padding:6px var(--g) calc(6px + env(safe-area-inset-bottom))}
+  .bbar .seg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+  .bbar .seg a{min-height:48px;padding:0 2px;font-size:16px;letter-spacing:.02em;font-stretch:66%}
+  .crow{grid-template-columns:minmax(0,1fr) auto;padding:10px 12px}
+  .crow .nm{grid-column:1 / -1}
+  .crow .what{grid-column:1 / -1}
+  .crow .tel{grid-column:1}
+  .crow .stx{grid-column:2}
+}
+@media (max-width:560px){
+  .tile{padding:16px}
+  .os-steps{grid-template-columns:minmax(0,1fr)}
+  .tile.big{padding:22px 16px}
+  .step{min-height:calc(100dvh - var(--hh) - 96px)}
+  .hd .co{font-size:20px;letter-spacing:.05em}
+  .tile.list{padding:2px 4px 6px}
+  .stat{font-size:44px}
+  .kv > div{grid-template-columns:minmax(0,1fr)}
+  .acts.stretch > .bt{flex:1 1 0}
+  .hrow{grid-template-columns:minmax(0,1fr)}
+  .hrow .acts .bt{flex:1 1 0}
+  .urg{grid-template-columns:minmax(0,1fr)}
+  .urg .bt{width:100%}
+  .codes > div{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){
+  /* his company's name comes first on a small phone; Today and the paused tile say the line's state */
+  .hd .line-now{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .oa *{transition:none !important}
+}
+
+/* small pieces */
+#signin .r75{min-height:calc(100vh - var(--hh) - var(--g));min-height:calc(100dvh - var(--hh) - var(--g))}
+.oa fieldset{border:0;margin:0;padding:0;min-width:0}
+.kv-list > li{padding:12px 14px}
+.steps-l.big-steps li{font-size:18px}
+.tile-in{display:grid;gap:8px}
+@media (max-width:860px){ .two-os{grid-template-columns:minmax(0,1fr)} }
+/* the month runs the full width on a phone so every day is a square of 44 px or more */
+@media (max-width:560px){
+  #days{margin:0 calc(-1 * var(--g));border-radius:0;padding:16px 6px}
+  #days > :not(.month){padding-left:10px;padding-right:10px}
+  .month .wk,.month .grid{gap:2px}
+  .month .wk span{padding-left:4px;font-size:16px;letter-spacing:0}
+  .day{padding:5px}
+  .day .w{display:none}
+}
+@media (max-width:359px){
+  .hd .co{font-size:18px;letter-spacing:.03em}
+  .hd{gap:6px}
+}
+
+/* F2 (30 Sep 2026): when the state was last read, and a Refresh for a phone
+   app with no reload button (B7) */
+.upd{display:flex;align-items:center;justify-content:space-between;gap:0 12px;flex-wrap:wrap}
+.upd.top{margin-top:-10px}
+.upd.top .data{margin-left:auto}
+.upd.top .bt.q{margin-right:-12px}
+.upd .data{color:var(--muted)}
+.upd .data.off{color:var(--text);background:var(--accbg);padding:8px 12px;border-radius:4px}
+.shd .upd{margin-top:8px}
+/* Today: the urgent calls past the first three are one button to Calls (B17) */
+.tile.more{padding:12px 14px}
+.tile.more .bt{width:100%}
+/* Robot: each group opens from its title; on a phone one at a time (B17) */
+.fgroup .gh{margin:0}
+.gtog{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;width:100%;min-height:44px;padding:0;border:0;background:none;color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.gtog .rank{grid-column:1}
+.gtog .gsum{grid-column:1;display:none;margin-top:6px;color:var(--muted);font:400 16px/1.35 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtog .chev{grid-column:2;grid-row:1 / span 2;width:14px;height:9px;margin-right:6px;background:var(--text);clip-path:polygon(0 0,50% 62%,100% 0,100% 38%,50% 100%,0 38%);transition:transform .16s ease-out}
+.gtog[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.fgroup.shut .gsum{display:block}
+.fgroup.shut{padding-top:12px;padding-bottom:12px}
+.gtog:focus-visible{outline:2px solid var(--text);outline-offset:4px;border-radius:2px}
+@media (max-width:860px){ .fgroups .fgroup{margin-bottom:8px} }
+.gbody > * + *{margin-top:14px}
+.oa .back{margin:12px 0 0}
+
+/* ================================================================ D1: the calmer look (30 Sep 2026)
+   Adithya's redesign in the app: one quiet surface with thin dividers instead of
+   a box around everything, normal-case headings in Bricolage, Archivo for
+   reading, the mono font only for times and numbers, one blue accent, yellow
+   only for urgent. The shared classes both D1 and D2 use: .row (.row-title,
+   .row-sub, .row-end), .sheet, .note-undo, .mark-urgent. Screen-only styles
+   are in screens.css. */
+
+/* the page: one quiet surface, content in a centred column on a laptop */
+body.oa{background:var(--bg);font-family:var(--font-body)}
+.oa main{max-width:1040px;margin-inline:auto;width:100%;gap:0}
+.oa .view,.oa [data-tab]{gap:var(--space-2)}
+
+/* type: normal case, Bricolage for headings */
+.cond,.disp,.h2,.rank,.stat,.stat-s,.opn,.hear .quote{font-family:var(--font-display);font-stretch:100%;text-transform:none;letter-spacing:-.01em}
+.disp{font-size:clamp(34px,5vw,52px);line-height:1.05;font-weight:650}
+.h2{font-size:clamp(26px,3vw,34px);line-height:1.12;font-weight:650}
+.rank{font-size:19px;line-height:1.25;font-weight:600;letter-spacing:0}
+.stat{font-weight:650}
+.stat-s{font-family:var(--font-mono);font-size:24px;font-weight:500;letter-spacing:.02em}
+.lbl,.fm label,.fl,.kv dt,.stx{font:600 16px/1.35 var(--font-body);text-transform:none;letter-spacing:0}
+.data,.tel,.code,.codes code,.day .n,.fchip .n,.crow .asked{font-family:var(--font-mono)}
+.say{font:500 16px/1.45 var(--font-body);background:var(--blue-soft);border-radius:10px}
+.say.good{background:var(--blue-soft)}
+.tag{font-family:var(--font-body);letter-spacing:.02em;background:var(--urgent);color:var(--urgent-ink)}
+
+/* no boxes: sections sit on the page, told apart by one thin line */
+.tile,.tile.big,.tile.list{background:none;border-radius:0;padding:var(--space-3) 0}
+.oa .view > .tile + .tile,.oa [data-tab] > .tile + .tile,.col > .tile + .tile,.col > .col + .col,.oa [data-tab] > .r75 + .r75,.oa [data-tab] > .r75 + .tile{box-shadow:inset 0 1px 0 var(--line)}
+.r75,.r3,.r2{gap:var(--space-2) var(--space-5)}
+.shd{padding:var(--space-4) 0 var(--space-2)}
+.alt > li,.alt > li:nth-child(odd){background:none;border-radius:0;box-shadow:inset 0 -1px 0 var(--line)}
+.alt > li:nth-child(odd) .bt.s{background:var(--surface)}
+.kv > div,.kv > div:nth-child(odd),.codes > div,.codes > div:nth-child(odd){background:none;border-radius:0;box-shadow:inset 0 -1px 0 var(--line);padding-inline:0}
+.grp{padding-inline:0}
+.crow,.lrow,.hrow{padding-inline:0}
+.crow:hover{background:none !important}
+
+/* buttons: Adithya's blue, pill-free, rounded as the site's */
+.bt{font-family:var(--font-body);font-stretch:100%;text-transform:none;letter-spacing:0;font-weight:600;font-size:16px;border-radius:10px;min-height:var(--tap)}
+.bt.p{background:var(--accent);color:#FFFFFF;box-shadow:none}
+.bt.p:hover{box-shadow:none;background:var(--blue-deep)}
+.bt.s{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule-2)}
+.bt.s:hover{background:var(--blue-soft)}
+.bt.q{color:var(--blue-deep)}
+.bt:disabled,.bt[aria-disabled="true"]{background:var(--line);color:var(--muted);box-shadow:none}
+.oa .tl{color:var(--blue-deep)}
+.oa :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* inputs: white on the paper, a thin edge, blue when typing */
+.oa input[type=email],.oa input[type=password],.oa input[type=text],.oa input[type=tel],.oa textarea{background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule-2);border-radius:10px;font-family:var(--font-body)}
+.oa input:focus,.oa textarea:focus{background:var(--surface);box-shadow:inset 0 0 0 2px var(--accent)}
+.oa input[readonly]{font-family:var(--font-mono);font-size:16px}
+.choice,.cbx,.dchip{background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule-2);border-radius:10px}
+.choice:hover,.cbx:hover,.dchip:hover{background:var(--blue-soft)}
+.choice:has(input:checked){background:var(--blue-soft);box-shadow:inset 0 0 0 2px var(--accent)}
+.fchip{background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule-2);border-radius:999px}
+.fchip[aria-pressed="true"]{background:var(--ink);color:#FFFFFF;box-shadow:none}
+.switch[aria-checked="true"] .track{background:var(--accent)}
+.switch[aria-checked="true"] .knob{background:var(--surface)}
+.prog{padding:var(--space-3) 0;background:none}
+.prog .bar{background:var(--line);border-radius:999px}
+.prog .bar i{background:var(--accent)}
+.ask,.hrow .ask{background:var(--blue-soft);border-radius:10px}
+
+/* ---------------------------------------------------------------- the header */
+.hd{background:var(--bg);box-shadow:inset 0 -1px 0 var(--line);gap:var(--space-3);padding-inline:max(var(--g),calc((100vw - 1040px) / 2))}
+.hd .co{font:650 19px/1.2 var(--font-display);text-transform:none;letter-spacing:-.01em;font-stretch:100%}
+.hd .seg{background:none;padding:0;gap:var(--space-1);margin-left:auto}
+.hd .seg + .pill{margin-left:var(--space-2)}
+.seg a{font-family:var(--font-body);font-stretch:100%;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted);border-radius:10px}
+.seg a:hover{background:var(--blue-soft);color:var(--ink)}
+.seg a[aria-current="page"]{background:var(--blue-soft);color:var(--blue-deep)}
+.seg a svg{flex:none;width:24px;height:24px}
+.hd .seg a svg{display:none}
+
+/* the line pill: "Answering" or "Paused"; a tap pauses or resumes */
+.hd .pill,.pill{flex:none;display:inline-flex;margin-left:auto;align-items:center;gap:8px;min-height:var(--tap);padding:0 16px 0 14px;border:0;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule-2);color:var(--ink);font:600 16px/1 var(--font-body);cursor:pointer;white-space:nowrap}
+.hd .line-now::before,.pill::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:none}
+.pill:hover{background:var(--blue-soft)}
+.pill.paused{color:var(--muted)}
+.hd .line-now.paused::before,.pill.paused::before{background:none;box-shadow:inset 0 0 0 2px var(--muted)}
+.pill[aria-busy="true"]{cursor:progress}
+
+/* ---------------------------------------------------------------- shared rows */
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--space-1) var(--space-3);min-height:56px;padding:var(--space-3) 0;box-shadow:inset 0 -1px 0 var(--line)}
+.row-title{display:block;font:600 17px/1.35 var(--font-body);color:var(--ink);overflow-wrap:anywhere}
+.row-sub{display:block;color:var(--muted);font-size:16px;line-height:1.45;overflow-wrap:anywhere}
+.row-end{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-2);flex-wrap:wrap}
+.mark-urgent{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;background:var(--urgent);color:var(--urgent-ink);font:600 16px/1.4 var(--font-body);white-space:nowrap}
+
+/* the sheet: white, rounded on top (a side panel on a laptop) */
+.sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0}
+.sheet .foot-row{background:var(--surface);box-shadow:inset 0 1px 0 var(--line)}
+
+/* the "Done. Undo" note, at the foot of the screen */
+.note-undo{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:calc(var(--bb) + var(--space-3));display:flex;align-items:center;gap:var(--space-2);max-width:calc(100vw - 2 * var(--space-3));padding:4px 6px 4px 20px;border-radius:999px;background:var(--ink);color:#FFFFFF;font:500 16px/1.35 var(--font-body)}
+.note-undo[hidden]{display:none}
+.note-undo .bt.q{color:#FFFFFF;text-decoration:underline 2px;text-underline-offset:4px}
+.note-undo .bt.q:hover{color:var(--sky)}
+
+/* the quiet lines at the top of the app: offline, a paused line */
+.off-note{margin-top:var(--space-3)}
+.paused-t{padding:var(--space-3) 0}
+
+/* ---------------------------------------------------------------- sign-in, first password, setup: one centred card */
+#signin,#setup{max-width:560px;width:100%;margin:clamp(16px,6vh,72px) auto var(--space-5)}
+.card-c,#setup .step{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--radius);padding:var(--space-5) clamp(20px,5vw,40px)}
+.card-c{display:grid;gap:var(--space-3)}
+.card-c > *{margin:0}
+.card-mark{display:flex;align-items:center;gap:10px;font:650 19px/1 var(--font-display);color:var(--ink)}
+.card-mark img{display:block;width:32px;height:32px}
+.card-c .fm{max-width:none}
+.card-c .acts.stretch .bt{flex:1 1 auto}
+#setup .step{min-height:0}
+#setup .step .acts.split{margin-top:var(--space-3)}
+#setup .prog{padding:0 var(--space-1) var(--space-2)}
+
+/* ---------------------------------------------------------------- Settings (was Profile) */
+.set{display:grid;gap:var(--space-5);max-width:720px}
+.set-s{display:grid;gap:0}
+.set-h{font:650 21px/1.2 var(--font-display);letter-spacing:-.01em;padding-bottom:var(--space-2);box-shadow:inset 0 -1px 0 var(--line)}
+.set-s .fm{padding:var(--space-3) 0;box-shadow:inset 0 -1px 0 var(--line);max-width:none}
+.set-s .fm .row-title{margin-bottom:var(--space-1)}
+.set-s .ask{margin:var(--space-3) 0}
+.set-s .row-end .bt{white-space:nowrap}
+.fold > summary{list-style:none;cursor:pointer}
+.fold > summary::-webkit-details-marker{display:none}
+.fold > summary .chev{width:24px;height:24px;color:var(--muted);transition:transform .16s ease-out}
+.fold[open] > summary .chev{transform:rotate(180deg)}
+.fold[open] > summary{box-shadow:none}
+.fold-in{display:grid;gap:var(--space-3);padding:0 0 var(--space-4);box-shadow:inset 0 -1px 0 var(--line)}
+.fold-in > *{margin:0}
+.set-out{display:grid;gap:var(--space-2);padding-top:var(--space-2)}
+.set-out .bt{width:100%}
+.hs-icon{width:56px;height:56px;border-radius:14px}
+.hs-top{grid-template-columns:56px minmax(0,1fr)}
+
+/* ---------------------------------------------------------------- phone: the tabs at the bottom, with icons */
+@media (max-width:860px){
+  .bbar{background:var(--surface);box-shadow:inset 0 1px 0 var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+  .bbar .seg{background:none;padding:0;gap:0}
+  .bbar .seg a{flex-direction:column;gap:2px;min-height:56px;padding:4px 0;border-radius:10px;font-size:16px;font-stretch:84%;letter-spacing:-.01em;line-height:1.1;background:none}
+  .bbar .seg a[aria-current="page"]{color:var(--blue-deep);background:none}
+  .bbar .seg a[aria-current="page"] svg{color:var(--accent)}
+  .note-undo{bottom:calc(var(--bb) + var(--space-2))}
+  :root{--bb:calc(66px + env(safe-area-inset-bottom))}
+}
+@media (max-width:560px){
+  .hd .line-now[data-line-now]:not([hidden]){display:inline-flex}
+  .tile,.tile.big{padding:var(--space-4) 0}
+  .card-c,#setup .step{padding:var(--space-4) var(--space-3)}
+  #signin,#setup{margin-top:var(--space-3)}
+  .hd .co{font-size:17px}
+  .pill{padding:0 12px 0 12px}
+  .set-s div.row{grid-template-columns:minmax(0,1fr)}
+  .set-s div.row .row-end{justify-content:flex-start}
+}
+
+/* motion off when he asks for less */
+@media (prefers-reduced-motion:reduce){
+  .oa *,.oa *::before,.oa *::after{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+}
+.upd.top{margin-top:0}

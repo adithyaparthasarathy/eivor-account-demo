@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>LM</title>
+  <rect width="512" height="512" fill="#0A1633"/>
+  <g fill="#FFE680">
+    <path d="M106 156h52v148h62v52H106z"/>
+    <path d="M240 356V156h60l23 80 23-80h60v200h-50V248l-18 64h-30l-18-64v108z"/>
+  </g>
+</svg>

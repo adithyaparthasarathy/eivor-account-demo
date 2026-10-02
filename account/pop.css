@@ -1,0 +1,345 @@
+/* pop.css: the account's finishing layer (1 Oct 2026), loaded after app.css and
+   screens.css. It is the home page's look taken all the way into the app: the
+   same night-blue ink, cool paper, one electric blue and the three self-hosted
+   fonts, now with real depth (hairline cards and soft shadows), a left side
+   menu on a laptop, and the components named the way shadcn/ui names them
+   (card, button, badge, switch, sheet, command, toast, skeleton) written as
+   plain CSS, so there is still no build step and nothing from another host.
+
+   What it keeps from the site's own ban list (astra/TASTE.md): no gradients,
+   glows, glass, blobs or a second accent; yellow still means urgent only;
+   every size, tap and contrast rule in the brief still holds. The motion is
+   motion.js's (GSAP, SplitText and Lenis from /assets/vendor); this file only
+   has the resting look and the small CSS transitions, all off under
+   prefers-reduced-motion. */
+
+:root{
+  /* shadcn's semantic names, mapped onto the site's tokens */
+  --background:var(--paper);
+  --foreground:var(--ink);
+  --card-bg:var(--card);
+  --border:var(--rule);
+  --input:var(--rule-2);
+  --ring:var(--blue);
+  --muted-fg:var(--muted);
+  --primary:var(--blue);
+  --primary-fg:#FFFFFF;
+  --accent-bg:var(--blue-soft);
+  --radius-lg:16px;
+  --radius-md:12px;
+  --shadow-xs:0 1px 2px rgba(10,22,51,.05);
+  --shadow-sm:0 1px 0 var(--rule),0 1px 3px rgba(10,22,51,.06);
+  --shadow-lg:0 1px 0 var(--rule),0 30px 60px -36px rgba(10,22,51,.34);
+  --out:cubic-bezier(0.22,1,0.36,1);       /* the site's reveal curve */
+  --side:272px;
+}
+
+/* ================================================================== base */
+body.oa{background:var(--background);font-size:17px;letter-spacing:-.003em;text-rendering:optimizeLegibility}
+body.oa::selection,.oa ::selection{background:var(--blue);color:#FFFFFF}
+.oa .rv-in{will-change:transform,opacity}
+
+/* skeleton: the opening screen is a quiet shimmer, not a sentence */
+.opening{display:grid;gap:14px;align-content:start;min-height:0;padding-top:clamp(40px,10vh,120px)}
+#opening{max-width:560px;margin-inline:auto;width:100%}
+#opening .tile{background:var(--card-bg);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px}
+#opening .lbl{display:none}
+#opening-text{font-size:17px;color:var(--muted-fg)}
+.skel{display:block;height:14px;border-radius:7px;background:var(--border)}
+.js .skel{position:relative;overflow:hidden;background:var(--border)}
+.js .skel::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:var(--blue-soft);animation:skel 1.4s var(--out) infinite}
+@keyframes skel{to{transform:translateX(100%)}}
+
+/* ================================================================== button (shadcn: Button) */
+.bt{border-radius:var(--radius-md);font-weight:650;position:relative;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .45s var(--out)}
+.bt:active:not(:disabled){transform:scale(.97)}
+.bt.p{box-shadow:var(--shadow-xs),inset 0 1px 0 rgba(255,255,255,.14)}
+.bt.p:hover{background:var(--blue-deep)}
+.bt.s{box-shadow:var(--shadow-xs),inset 0 0 0 1px var(--input)}
+.bt.s:hover{box-shadow:var(--shadow-xs),inset 0 0 0 1px var(--blue);background:var(--accent-bg)}
+.bt.q:hover{background:var(--accent-bg);color:var(--blue-deep)}
+.oa .tl{font-weight:650}
+.oa :focus-visible{outline:3px solid var(--ring);outline-offset:3px}
+.oa input:focus-visible,.oa textarea:focus-visible{outline:2px solid var(--ring);outline-offset:0}
+
+/* ================================================================== input (shadcn: Input, Label) */
+.oa input[type=email],.oa input[type=password],.oa input[type=text],.oa input[type=tel],.oa textarea{min-height:50px;border-radius:var(--radius-md);box-shadow:var(--shadow-xs),inset 0 0 0 1px var(--input);transition:box-shadow .2s ease}
+.oa input:focus,.oa textarea:focus{box-shadow:0 0 0 5px var(--accent-bg),inset 0 0 0 1px var(--ring)}
+.fm label,.fl{font-weight:650;color:var(--ink);margin-top:14px}
+.fm label:first-child{margin-top:0}
+.say{border-radius:var(--radius-md);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 22%,transparent)}
+
+/* ================================================================== badge, switch, chips */
+.mark-urgent,.tag{background:var(--urgent);color:var(--urgent-ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent);font-weight:700}
+.fchip{border-radius:999px;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .45s var(--out)}
+.fchip:active{transform:scale(.96)}
+.fchip:hover{box-shadow:inset 0 0 0 1px var(--blue)}
+.fchip[aria-pressed="true"]{box-shadow:var(--shadow-xs)}
+.switch .track{border-radius:999px;width:48px;height:28px;background:var(--rule-2);transition:background-color .25s ease}
+.switch .knob{border-radius:50%;width:22px;height:22px;top:3px;left:3px;background:var(--card-bg);box-shadow:0 1px 3px rgba(10,22,51,.3);transition:transform .45s var(--out),left 0s}
+.switch[aria-checked="true"] .track{background:var(--blue)}
+.switch[aria-checked="true"] .knob{left:3px;transform:translateX(20px);background:var(--card-bg)}
+
+/* ================================================================== card (shadcn: Card) */
+.pop-card,.oa .block,.oa .tile.cal,.oa .tile.list{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.oa .block{padding:6px 22px 8px;margin:0}
+.oa .block-top,.oa .block > .block-h{display:flex;align-items:center;min-height:60px;padding:0}
+.oa .block-top .block-h{padding:0}
+.oa .block .rows{margin:0}
+.oa .block .rows > .row{padding:14px 0}
+.oa .block .rows > .row:last-child{box-shadow:none}
+.block-h,.oa .block-h{font:650 19px/1.25 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.rows > .row{transition:background-color .2s ease}
+.oa .tile.cal,.oa .tile.list{padding:22px 24px}
+.oa .tile.cal{box-shadow:var(--shadow-lg)}
+
+/* the row: a hover wash that reaches past the edge a little, so it reads as one thing to tap */
+.rows > .row,.crow,.hrow{position:relative}
+@media (hover:hover){
+  .rows > .row:hover{background:color-mix(in srgb,var(--blue-soft) 55%,transparent);box-shadow:-14px 0 0 color-mix(in srgb,var(--blue-soft) 55%,transparent),14px 0 0 color-mix(in srgb,var(--blue-soft) 55%,transparent),inset 0 -1px 0 var(--border)}
+  .oa .block .rows > .row:last-child:hover{box-shadow:-14px 0 0 color-mix(in srgb,var(--blue-soft) 55%,transparent),14px 0 0 color-mix(in srgb,var(--blue-soft) 55%,transparent)}
+}
+
+/* ================================================================== the shell */
+/* signed out: no bar, just the page */
+body.oa:has(#signin:not([hidden])) .hd{display:none}
+body.oa:has(#signin:not([hidden])) main{max-width:none;padding:0}
+
+/* first password and setup: the bar is a plain top line */
+.hd{background:color-mix(in srgb,var(--background) 92%,transparent);backdrop-filter:none}
+
+/* signed in, laptop: the side menu */
+@media (min-width:1024px){
+  body.oa:has(#account:not([hidden])){padding-left:var(--side)}
+  body.oa:has(#account:not([hidden])) .hd{position:fixed;inset:0 auto 0 0;z-index:25;width:var(--side);height:100dvh;padding:22px 16px 18px;display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto 1fr auto auto auto;grid-template-areas:"mk co" "nav nav" "sp sp" "kb kb" "pill pill" "who who";align-items:center;column-gap:10px;row-gap:0;background:var(--card-bg);box-shadow:inset -1px 0 0 var(--border);overflow:hidden auto}
+  body.oa:has(#account:not([hidden])) .hd .mk{grid-area:mk;margin:0;width:44px;height:44px;border-radius:var(--radius-md);background:var(--blue-soft)}
+  body.oa:has(#account:not([hidden])) .hd .mk img{width:24px;height:24px}
+  body.oa:has(#account:not([hidden])) .hd .co{grid-area:co;font:700 19px/1.15 var(--display);letter-spacing:-.025em;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  body.oa:has(#account:not([hidden])) .hd .seg{grid-area:nav;position:relative;flex-direction:column;align-items:stretch;gap:2px;margin:26px 0 0;padding:0}
+  body.oa:has(#account:not([hidden])) .hd .seg a{justify-content:flex-start;gap:14px;min-height:46px;padding:0 14px;font-size:16.5px;font-weight:600;color:var(--muted-fg);background:none;position:relative;z-index:1;transition:color .25s ease,transform .45s var(--out)}
+  body.oa:has(#account:not([hidden])) .hd .seg a svg{display:block;flex:none;width:22px;height:22px;transition:transform .5s var(--out)}
+  body.oa:has(#account:not([hidden])) .hd .seg a:hover{background:none;color:var(--ink)}
+  body.oa:has(#account:not([hidden])) .hd .seg a:hover svg{transform:translateX(2px) scale(1.06)}
+  body.oa:has(#account:not([hidden])) .hd .seg a[aria-current="page"]{background:none;color:var(--blue-deep)}
+  /* the sliding mark behind the current tab (motion.js moves it) */
+  .seg .seg-mark{position:absolute;left:0;top:0;right:0;height:46px;border-radius:var(--radius-md);background:var(--blue-soft);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 20%,transparent);pointer-events:none;z-index:0;transform:translateY(0)}
+  .seg .seg-mark::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;border-radius:3px;background:var(--blue)}
+  .seg a[aria-current="page"]{background:none}
+  body.oa:has(#account:not([hidden])) .hd .kbar{grid-area:kb}
+  body.oa:has(#account:not([hidden])) .hd .line-now{grid-area:pill;margin:12px 0 0;width:100%;justify-content:flex-start;height:52px;border-radius:var(--radius-md);box-shadow:var(--shadow-xs),inset 0 0 0 1px var(--input)}
+  body.oa:has(#account:not([hidden])) .bbar{display:none}
+  body.oa:has(#account:not([hidden])) main{max-width:1240px;padding-inline:clamp(28px,3.4vw,64px);padding-bottom:72px;margin-inline:0}
+  #account > [data-tab]{max-width:none;margin-inline:0;width:100%}
+}
+
+/* his name at the foot of the side menu: initials in a circle, his name, Sign out */
+.who{display:none}
+@media (min-width:1024px){
+  body.oa:has(#account:not([hidden])) .hd .who:not([hidden]){grid-area:who;display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:10px;margin:14px -16px -18px;padding:12px 8px 12px 16px;box-shadow:inset 0 1px 0 var(--border)}
+  .who .av{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#FFFFFF;font:700 16px/1 var(--display);letter-spacing:.02em}
+  .who .who-n{font:650 16px/1.25 var(--font-body);color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .who .bt.q{padding:0 10px;font-size:16px;color:var(--muted-fg)}
+  .who .bt.q:hover{color:var(--blue-deep)}
+}
+
+/* the shortcut hint at the foot of the side menu (shadcn: Command, kbd) */
+.kbar{display:none}
+@media (min-width:1024px){
+  .kbar{display:flex;align-items:center;gap:10px;width:100%;min-height:46px;padding:0 12px 0 14px;border:0;border-radius:var(--radius-md);background:var(--background);box-shadow:inset 0 0 0 1px var(--border);color:var(--muted-fg);font:550 16px/1 var(--font-body);cursor:pointer;transition:box-shadow .2s ease,color .2s ease,transform .45s var(--out)}
+  .kbar:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--blue)}
+  .kbar:active{transform:scale(.98)}
+  .kbar svg{width:18px;height:18px;flex:none}
+  .kbar kbd{margin-left:auto;font:600 16px/1 var(--mono);color:var(--muted-fg);padding:4px 7px;border-radius:7px;background:var(--card-bg);box-shadow:inset 0 0 0 1px var(--border)}
+}
+
+/* the line pill, everywhere: a live dot that breathes while answering */
+.pill{box-shadow:var(--shadow-xs),inset 0 0 0 1px var(--input);transition:box-shadow .2s ease,background-color .2s ease,transform .45s var(--out)}
+.pill:active{transform:scale(.97)}
+.pill::before{position:relative;flex:none}
+.pill:not(.paused)::before{animation:live 2.4s ease-out infinite}
+@keyframes live{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--blue) 45%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+
+/* ================================================================== sign-in: the product beside the form */
+#signin{gap:0;max-width:none;width:100%;margin:0;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:stretch}
+#signin .card-c{align-self:center;justify-self:center;width:min(480px,calc(100% - 2 * var(--pad)));margin:0;padding:clamp(28px,4vw,44px);background:var(--card-bg);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);gap:12px}
+#signin .card-c .h2{font:700 clamp(28px,2.6vw,36px)/1.05 var(--display);font-stretch:92%;letter-spacing:-.035em}
+#signin .acts.stretch .bt{height:54px;font-size:17px}
+#signin .hint{font-size:16px}
+.si-art{position:relative;display:flex;flex-direction:column;justify-content:center;gap:clamp(22px,3.4vh,40px);padding:clamp(32px,6vw,96px) clamp(24px,5vw,80px);background:var(--background);box-shadow:inset -1px 0 0 var(--border);overflow:hidden}
+.si-kick{font-size:16px;font-weight:650;color:var(--blue-deep)}
+.si-h{font:700 clamp(40px,5.2vw,84px)/.95 var(--display);font-stretch:88%;letter-spacing:-.045em;max-width:9.5em}
+.si-h .ch{display:inline-block}
+.si-sub{font-size:clamp(17px,1.35vw,21px);line-height:1.5;color:var(--muted-fg);max-width:29em}
+.si-card{max-width:560px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden}
+.si-live{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 20px;background:var(--blue-soft);border-bottom:1px solid var(--border)}
+.si-live b{display:block;font-size:16px;font-weight:650;color:var(--blue-deep)}
+.si-live span{font-size:16px}
+.si-live time{font:500 16px/1 var(--mono);color:var(--blue-deep)}
+.si-voice{display:flex;align-items:center;gap:3px;height:22px;width:28px}
+.si-voice i{display:block;width:3px;height:40%;border-radius:2px;background:var(--blue);animation:voice 1.1s ease-in-out infinite}
+.si-voice i:nth-child(2){animation-delay:-.2s}.si-voice i:nth-child(3){animation-delay:-.45s}.si-voice i:nth-child(4){animation-delay:-.7s}.si-voice i:nth-child(5){animation-delay:-.9s}
+@keyframes voice{0%,100%{height:30%}50%{height:100%}}
+.si-calls li{display:grid;grid-template-columns:5em minmax(0,1fr) auto;align-items:center;column-gap:14px;padding:13px 20px;border-bottom:1px solid var(--border);font-size:16px}
+.si-calls li:last-child{border-bottom:0}
+.si-calls time{font:500 16px/1 var(--mono);color:var(--muted-fg)}
+.si-calls b{display:block;font-weight:650}
+.si-calls span{display:block;color:var(--muted-fg);font-size:16px}
+.si-calls em{font-style:normal;font-weight:650;font-size:16px;text-align:right}
+.si-calls .urg{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:var(--urgent);color:var(--urgent-ink);font-style:normal;font-size:16px;font-weight:700;vertical-align:1px}
+@media (max-width:900px){
+  #signin{grid-template-columns:minmax(0,1fr);min-height:0}
+  .si-art{box-shadow:inset 0 -1px 0 var(--border);padding-top:96px;padding-bottom:36px}
+  .si-art .si-card,.si-art .si-sub{display:none}
+  .si-h{font-size:clamp(38px,11vw,56px)}
+  #signin .card-c{margin:28px auto 48px}
+}
+
+/* first password and setup: one centred card with depth */
+#setup{max-width:600px}
+#setup .step,.card-c{border:1px solid var(--border);box-shadow:var(--shadow-lg)}
+#setup .step .h2{font:700 clamp(26px,3vw,34px)/1.1 var(--display);letter-spacing:-.03em}
+.prog .bar{height:8px}
+.prog .bar i{border-radius:999px}
+.choice{border-radius:var(--radius-md);transition:background-color .2s ease,box-shadow .2s ease,transform .45s var(--out)}
+.choice:active{transform:scale(.985)}
+
+/* ================================================================== Today */
+.shd{padding:clamp(24px,4vh,44px) 0 clamp(14px,2vh,22px)}
+.shd .h2{font:700 clamp(34px,3.6vw,56px)/1 var(--display);font-stretch:92%;letter-spacing:-.04em}
+.shd .lede{font-size:clamp(17px,1.3vw,20px)}
+#tab-today .tile.greet{padding:clamp(28px,5vh,64px) 0 clamp(18px,3vh,32px)}
+#tab-today [data-greeting]{font:700 clamp(40px,4.8vw,76px)/.98 var(--display);font-stretch:90%;letter-spacing:-.045em;max-width:14em}
+#tab-today .needs-line{display:block;margin-top:14px;font:400 clamp(19px,1.7vw,25px)/1.4 var(--font-body);letter-spacing:-.01em;color:var(--muted-fg);max-width:30em}
+#tab-today .tile.greet,#tab-today .tile.greet > .upd{background:none;box-shadow:none;border:0;border-radius:0}
+#tab-today .upd.top{display:block;margin:0 0 10px;padding:0}
+#tab-today .upd.top .lbl{margin:0}
+#tab-today .upd.top .lbl{font:650 16px/1.3 var(--font-body);color:var(--blue-deep)}
+@media (min-width:1024px){
+  #tab-today [data-today-lists]{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 20px;align-items:start}
+  #tab-today [data-today-lists] > .col:first-child{display:contents}
+  #tab-today [data-today-urgent]{grid-column:1;grid-row:1 / span 2}
+  #tab-today [data-today-holds]{grid-column:2;grid-row:1}
+  #tab-today [data-today-latest]{grid-column:2;grid-row:2}
+  #tab-today [data-today-holds][hidden]{display:none}
+  #tab-today [data-today-holds]:not([hidden]){margin-bottom:20px}
+  #tab-today [data-today-lists] .col{box-shadow:none}
+  #tab-today [data-today-urgent]:empty{display:none}
+}
+#tab-today .rows .row-title{font-size:18px}
+#tab-today .today-empty{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:clamp(28px,4vw,48px)}
+
+/* ================================================================== Calls */
+#tab-calls .chips{margin:0 0 18px}
+#tab-calls [data-calls]{display:grid;gap:22px}
+#tab-calls .block.calls-day{margin:0}
+@media (min-width:1280px){
+  #tab-calls [data-calls]{grid-template-columns:minmax(0,1fr)}
+}
+#tab-calls .row{cursor:pointer}
+#tab-calls .row-title{font-size:18px}
+
+/* ================================================================== Calendar */
+@media (min-width:1024px){
+  /* the month on the left, the dates coming up beside it */
+  #tab-calendar{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0 20px;align-items:start}
+  #tab-calendar > .shd{grid-column:1 / -1}
+  #tab-calendar > .calr{grid-column:1;grid-row:2;grid-template-columns:minmax(0,1fr)}
+  #tab-calendar > #holds{grid-column:2;grid-row:2}
+}
+body.oa #tab-calendar #holds{background:var(--card-bg);padding:8px 24px 14px;border-radius:var(--radius-lg)}
+#tab-calendar #holds .grp{padding-inline:0}
+#tab-calendar .month-bar{margin-bottom:16px}
+#tab-calendar #month-name{font:700 clamp(26px,2.4vw,34px)/1.1 var(--display);letter-spacing:-.035em}
+.month .wk span{font:600 16px/1 var(--font-body);letter-spacing:0;color:var(--muted-fg);padding:0 0 4px 4px;text-transform:none}
+.day{border-radius:var(--radius-md);transition:background-color .2s ease,box-shadow .2s ease,transform .45s var(--out);font-family:var(--mono)}
+#tab-calendar [data-month] .day,#tab-calendar [data-month] .day:hover:not(:disabled){background:var(--background);box-shadow:inset 0 0 0 1px var(--border)}
+#tab-calendar [data-month] .day:hover:not(:disabled){background:var(--accent-bg);box-shadow:inset 0 0 0 1px var(--blue)}
+#tab-calendar [data-month] .day:active:not(:disabled){transform:scale(.95)}
+#tab-calendar [data-month] .day:disabled{background:none;box-shadow:none}
+#tab-calendar [data-month] .day.today{background:var(--blue);color:#FFFFFF;box-shadow:var(--shadow-xs)}
+#tab-calendar [data-month] .day.today .dot{box-shadow:0 0 0 2px #FFFFFF}
+#tab-calendar .dot{width:9px;height:9px}
+.day .n{font-weight:600}
+
+/* ================================================================== Robot and Settings */
+#tab-robot .fgroup.shut{padding:0 22px}
+#tab-robot .fgroups{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden}
+#tab-robot .fgroup.shut:last-child{box-shadow:none}
+#tab-robot .fgroup.shut .gtog{transition:background-color .2s ease}
+#tab-robot .tile.hear .quote{font:italic 400 clamp(20px,1.7vw,24px)/1.45 var(--font-body)}
+#tab-robot .tile.hear{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:22px 24px;margin-bottom:20px}
+.oa [data-tab="profile"] .set{max-width:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.oa [data-tab="profile"] .set-s{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:6px 24px 14px}
+.oa [data-tab="profile"] .set-h{padding:18px 0 12px;font:700 22px/1.2 var(--display);letter-spacing:-.025em}
+.oa [data-tab="profile"] .set-out{grid-column:1 / -1;max-width:360px}
+@media (max-width:1023px){.oa [data-tab="profile"] .set{grid-template-columns:minmax(0,1fr)}}
+
+/* ================================================================== sheet (shadcn: Sheet) and the scrim */
+.scrim{background:color-mix(in srgb,var(--night) 46%,transparent)}
+.sheet{box-shadow:0 -20px 60px -20px rgba(7,15,41,.35);border-radius:20px 20px 0 0}
+@media (min-width:861px){
+  .sheet{border-radius:20px 0 0 20px;box-shadow:-30px 0 70px -30px rgba(7,15,41,.4)}
+}
+.sheet #sheet-h{font:700 clamp(26px,2.4vw,32px)/1.1 var(--display);letter-spacing:-.03em}
+#sheet .big-call{height:58px;border-radius:var(--radius-md)}
+
+/* ================================================================== toast (shadcn: Sonner) */
+.note-undo{box-shadow:0 18px 40px -16px rgba(7,15,41,.55);background:var(--night)}
+
+/* ================================================================== command (shadcn: Command, cmdk) */
+.cmdk-scrim{position:fixed;inset:0;z-index:60;background:color-mix(in srgb,var(--night) 50%,transparent);display:grid;justify-items:center;align-items:start;padding:14vh 16px 16px}
+.cmdk-scrim[hidden]{display:none}
+.cmdk{width:min(620px,100%);background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 40px 90px -30px rgba(7,15,41,.55);overflow:hidden}
+.cmdk-in{display:flex;align-items:center;gap:12px;padding:0 18px;border-bottom:1px solid var(--border)}
+.cmdk-in svg{width:20px;height:20px;flex:none;color:var(--muted-fg)}
+.cmdk-in input{flex:1;min-width:0;height:60px;border:0;outline:0;background:none;font:500 18px/1 var(--font-body);color:var(--ink)}
+.oa .cmdk-in input,.oa .cmdk-in input:focus{box-shadow:none;background:none;min-height:60px;border-radius:0}
+.cmdk-in kbd{font:600 16px/1 var(--mono);color:var(--muted-fg);padding:5px 7px;border-radius:7px;box-shadow:inset 0 0 0 1px var(--border)}
+.cmdk-list{max-height:min(62vh,500px);overflow:auto;padding:8px}
+.cmdk-grp{padding:10px 12px 6px;font-size:16px;font-weight:650;color:var(--muted-fg)}
+.cmdk-item{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:0 12px;border:0;border-radius:var(--radius-md);background:none;font:550 17px/1 var(--font-body);color:var(--ink);text-align:left;cursor:pointer}
+.cmdk-item svg{width:20px;height:20px;flex:none;color:var(--muted-fg)}
+.cmdk-item[aria-selected="true"]{background:var(--accent-bg);color:var(--blue-deep)}
+.cmdk-item[aria-selected="true"] svg{color:var(--blue)}
+.cmdk-item .hint{margin-left:auto;font:500 16px/1 var(--mono);color:var(--muted-fg)}
+.cmdk-empty{padding:28px 12px;text-align:center;color:var(--muted-fg)}
+
+/* ================================================================== phone */
+@media (max-width:860px){
+  .bbar{box-shadow:0 -1px 0 var(--border),0 -12px 30px -22px rgba(10,22,51,.4)}
+  .bbar .seg a{position:relative}
+  .bbar .seg a[aria-current="page"]::before{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:var(--blue)}
+  .oa .block{padding:2px 16px 4px}
+  #tab-today [data-greeting]{font-size:clamp(36px,10vw,48px)}
+}
+
+/* ================================================================== motion hygiene */
+@media (prefers-reduced-motion:reduce){
+  .pill::before,.si-voice i,.skel::after{animation:none !important}
+  .si-voice i{height:60%}
+}
+
+/* site.css's marketing ".rows" gives its first item a heavy ink rule; the app's rows are hairlines */
+.oa .rows > li:first-child,.oa .rows > li:last-child{border-top:0;border-bottom:0}
+.oa .rows > li{border:0}
+#signin .card-mark{display:flex}
+
+/* the key: today is a filled day, like the grid */
+.key .sw.today{background:var(--blue);box-shadow:none;border-radius:6px}
+.oa #tab-calendar .key .sw.today{width:18px;height:18px}
+
+/* the opening skeleton: three quiet lines */
+#opening .skel.s1{width:62%}
+#opening .skel.s2{width:88%}
+#opening .skel.s3{width:74%}
+
+/* the urgent badge keeps a little air from the name */
+.row-title .mark-urgent,#sheet-h .mark-urgent{margin-left:8px}
+
+/* the paused line: a quiet card at the top, the one way back on beside it */
+body.oa .tile.paused-t{margin-top:20px;padding:14px 14px 14px 22px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+body.oa .tile.paused-t p{max-width:none}
+
+/* the fixture's notice (this machine only): a small tag, not a headline */
+body.oa .tile[data-fixture]:not([hidden]){justify-self:start;margin-top:18px;padding:6px 14px;border-radius:999px;background:var(--card-bg);box-shadow:inset 0 0 0 1px var(--border)}
+body.oa .tile[data-fixture] .lbl{font:550 16px/1.3 var(--font-body);color:var(--muted-fg)}

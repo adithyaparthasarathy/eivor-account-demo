@@ -1,0 +1,16 @@
+{
+  "id": "/eivor-account-demo/account/",
+  "name": "Luterson Moving",
+  "short_name": "Luterson",
+  "description": "Your calls, held dates and robot.",
+  "start_url": "/eivor-account-demo/account/",
+  "scope": "/eivor-account-demo/account/",
+  "display": "standalone",
+  "background_color": "#DCE2EE",
+  "theme_color": "#DCE2EE",
+  "icons": [
+    { "src": "/eivor-account-demo/account/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/eivor-account-demo/account/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/eivor-account-demo/account/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,247 @@
+/* The marketing pages' shared stylesheet (/, /privacy/, /pricing/, 404):
+   tokens, type, buttons, links, the top bar, the phone Menu, the footer and
+   the plain-page parts. The home page's own sections are in home.css.
+
+   The look (redesign, 30 Sep 2026): a night-blue top of the home page, cool
+   paper below it, one electric-blue accent for buttons, links and live
+   things. Bricolage Grotesque for headlines, Archivo for reading, JetBrains
+   Mono for times and labels. All three are self-hosted: nothing is fetched
+   from another server. Contrast: text at least 4.5:1, controls 3:1. */
+
+/* Archivo, self-hosted: the latin subset, one variable file (weight 100 to 900,
+   width 62% to 125%). Nothing is fetched from another server. */
+@font-face{
+  font-family:"Archivo";
+  font-style:normal;
+  font-weight:100 900;
+  font-stretch:62% 125%;
+  font-display:swap;
+  src:url(/eivor-account-demo/assets/fonts/Archivo-latin-var.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* Bricolage Grotesque (SIL OFL), latin, weight 200 to 800, width 75% to 100% */
+@font-face{
+  font-family:"Bricolage";
+  font-style:normal;
+  font-weight:200 800;
+  font-stretch:75% 100%;
+  font-display:swap;
+  src:url(/eivor-account-demo/assets/fonts/Bricolage-latin-var.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* JetBrains Mono (SIL OFL), latin, weight 100 to 800: times, labels, numbers */
+@font-face{
+  font-family:"JetBrains Mono";
+  font-style:normal;
+  font-weight:100 800;
+  font-display:swap;
+  src:url(/eivor-account-demo/assets/fonts/JetBrainsMono-latin-var.woff2) format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root{
+  --night:#070F29; --night-2:#0D1A3D; --night-3:#16244D; --on-night:#EEF2FF; --on-night-2:#AAB6D6; --sky:#9DB3FF;
+  --paper:#F4F6FB; --card:#FFFFFF; --ink:#0A1633; --muted:#55617A; --rule:#DCE2EE; --rule-2:#C5CEDF;
+  --blue:#2B59FF; --blue-deep:#1638C9; --blue-soft:#E8EDFF;
+  /* the canary pair, kept for the account page (app.css) and the customer page (its own css), which were built on them (G2) */
+  --sig:#FFE680; --tint:#FFF6CC;
+  --display:"Bricolage","Archivo",ui-sans-serif,system-ui,sans-serif;
+  --text:"Archivo",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --pad:clamp(20px,4vw,72px);
+  --r:12px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --spring:cubic-bezier(0.34,1.4,0.64,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:84px}
+body{background:var(--paper);color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+ol,ul{list-style:none}
+h1,h2,h3{font-family:var(--display);text-wrap:balance}
+p{text-wrap:pretty}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+::selection{background:var(--blue);color:#FFFFFF}
+
+/* ------------------------------------------------------------------ parts */
+.label{font-size:15px;font-weight:600;color:var(--blue-deep)}
+
+/* the button: a fill that rises from the bottom on hover, a press that
+   gives a little, and (motion.js, fine pointers only) a magnetic pull */
+.btn{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 26px;border:0;border-radius:8px;background:var(--blue);color:#FFFFFF;font:inherit;font-size:17px;font-weight:650;letter-spacing:-.005em;white-space:nowrap;cursor:pointer;transition:transform .5s var(--spring),box-shadow .3s ease;will-change:transform}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--blue-deep);border-radius:inherit;transform:translateY(101%);transition:transform .45s var(--ease)}
+.btn:hover::before{transform:none}
+.btn:active{transform:scale(.97)}
+.btn > span{display:inline-block;transition:transform .45s var(--ease)}
+.btn.big{height:60px;padding:0 32px;font-size:18px}
+.note{color:var(--muted);font-size:14px;margin-top:14px}
+
+/* the text link: the underline draws in from the left and leaves to the right */
+.tl{position:relative;display:inline-flex;align-items:center;min-height:44px;font-weight:650;color:inherit;background:linear-gradient(currentColor,currentColor) 0 calc(50% + .8em)/100% 2px no-repeat;transition:background-size .45s var(--ease)}
+.tl:hover{background-size:0 2px;background-position:100% calc(50% + .8em)}
+.tl::after{content:"";position:absolute;left:0;right:0;top:calc(50% + .8em);height:2px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease) .12s}
+.tl:hover::after{transform:scaleX(1)}
+
+h2,.as-h2{font-size:clamp(34px,4.4vw,76px);font-weight:700;font-stretch:92%;letter-spacing:-.035em;line-height:1;margin-top:18px;max-width:18em}
+.band{padding:clamp(72px,9vw,150px) var(--pad);border-top:1px solid var(--rule)}
+
+/* ------------------------------------------------------------------ top bar */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:clamp(14px,3vw,48px);height:74px;padding:0 var(--pad);background:rgba(244,246,251,.94);border-bottom:1px solid var(--rule);color:var(--ink);transition:transform .45s var(--ease),background-color .35s ease,color .35s ease,border-color .35s ease}
+.mark{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--display);font-size:23px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.mark img{height:26px;width:26px;display:block;transition:transform .7s var(--spring)}
+.mark:hover img{transform:rotate(-120deg)}
+.top nav{display:flex;gap:clamp(8px,1.6vw,28px);margin-left:auto;font-size:16px;font-weight:550;white-space:nowrap}
+.top nav a{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+.top nav a::after{content:"";position:absolute;left:4px;right:4px;bottom:8px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:100% 50%;transition:transform .4s var(--ease)}
+.top nav a:hover::after{transform:scaleX(1);transform-origin:0 50%}
+.top .btn{height:46px;padding:0 20px;font-size:16px}
+.menu{display:none;height:44px;padding:0 6px;border:0;background:none;color:inherit;font:inherit;font-size:16px;font-weight:650;cursor:pointer;margin-left:auto}
+
+/* ------------------------------------------------------------------ footer */
+.foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px clamp(20px,3vw,56px);padding:22px var(--pad);border-top:1px solid var(--rule);font-size:15px;color:var(--muted)}
+.foot .mark{font-size:18px;gap:8px;color:var(--ink)}
+.foot .mark img{height:22px;width:22px}
+.foot nav{display:flex;flex-wrap:wrap;gap:0 clamp(20px,2.4vw,40px);margin-left:auto}
+.foot nav a{position:relative;display:inline-flex;align-items:center;min-height:44px;color:var(--ink);font-weight:600}
+.foot nav a::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:100% 50%;transition:transform .4s var(--ease)}
+.foot nav a:hover::after{transform:scaleX(1);transform-origin:0 50%}
+
+/* ------------------------------------------------------------------ plain pages: /privacy/, 404 */
+.page-head{padding:clamp(56px,7vw,128px) var(--pad) clamp(40px,5vw,88px)}
+.page-head h1{font-size:clamp(44px,6.4vw,112px);font-weight:700;font-stretch:92%;letter-spacing:-.04em;line-height:.98;margin-top:20px;max-width:14em}
+.page-head .sub{font-size:clamp(18px,1.35vw,22px);color:var(--muted);margin-top:22px;line-height:1.5;max-width:32em}
+.page-head + .band{border-top:0;padding-top:0}
+.page-head .go{margin-top:32px} /* the 404 page's way home (bug hunt round 1, bug 7) */
+.rows li{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px clamp(32px,4vw,88px);padding:clamp(24px,2.6vw,40px) 0;border-top:1px solid var(--rule);align-items:baseline}
+.rows li:first-child{border-top:2px solid var(--ink)}
+.rows li:last-child{border-bottom:1px solid var(--rule)}
+.rows h2{font-size:clamp(22px,1.9vw,34px);margin-top:0;letter-spacing:-.02em;line-height:1.15}
+.rows p{font-size:clamp(18px,1.3vw,21px);line-height:1.5;max-width:36em;overflow-wrap:anywhere}
+.rows p a:not(.btn){padding:12px 0;color:var(--blue);font-weight:600;text-decoration:underline 1.5px;text-underline-offset:4px}
+.aside{font-size:clamp(17px,1.2vw,20px);color:var(--muted);margin-top:clamp(28px,3vw,48px);max-width:44em}
+
+/* bug hunt round 2, "Maybe" 1: read out by a screen reader, never drawn */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* the last real call to the demo line (card.js), under the hero's buttons */
+.lastcall{margin-top:26px;padding:14px 16px;border:1px solid var(--rule);border-radius:var(--r);background:var(--card);font-size:15px;line-height:1.4;max-width:34em}
+.lastcall .lc-title{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-weight:700}
+.lastcall .lc-ago{color:var(--muted);font-weight:400}
+.lastcall .lc-row{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:4px;overflow-wrap:anywhere}
+.lastcall .lc-biz{font-weight:700}
+.lastcall .lc-urg{font-weight:700;padding:0 6px;border:1px solid currentColor;border-radius:4px;font-size:13px;align-self:center}
+.lastcall .lc-booked{color:var(--muted)}
+
+/* ------------------------------------------------------------------ pricing (hidden for now) */
+.price-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,4vw,88px);align-items:start}
+.price{margin-top:clamp(28px,3vw,48px);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-height:1em}
+.price b{font-family:var(--display);font-size:clamp(72px,7.4vw,144px);font-weight:700;letter-spacing:-.05em;line-height:.9}
+.price span{font-size:clamp(18px,1.4vw,24px);font-weight:700}
+.ins li{display:flex;gap:14px;align-items:baseline;padding:16px 0;border-top:1px solid var(--rule);font-size:clamp(18px,1.3vw,22px)}
+.ins li:last-child{border-bottom:1px solid var(--rule)}
+.ins svg{flex:none;position:relative;top:2px;color:var(--blue)}
+.price-grid .btn{margin-top:32px}
+.price-pending{display:inline-block;margin-top:clamp(28px,3vw,48px);padding-top:14px;border-top:2px solid var(--ink);font-size:clamp(20px,1.6vw,28px);font-weight:700;line-height:1.3}
+/* /pricing/: the pricing block is the page's first band, under the top bar */
+.band.first{border-top:0}
+
+/* ------------------------------------------------------------------ the demo band */
+.demo-in{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,5vw,120px);align-items:end}
+.demo .line{font-size:clamp(17px,1.3vw,21px);margin-top:20px;max-width:34em}
+.demo .act{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.bignum{display:inline-flex;align-items:center;min-height:44px;font-family:var(--display);font-size:clamp(34px,8.4vw,104px);font-weight:700;letter-spacing:-.03em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ------------------------------------------------------------------ set-up form */
+.setup{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,4vw,88px);align-items:start}
+.setup .line{color:var(--muted);font-size:clamp(17px,1.25vw,21px);margin-top:20px;max-width:28em}
+.setup .contact-line{font-size:clamp(16px,1.1vw,18px);color:var(--ink)}
+/* Ethan 27 Sep: the email and phone links in the Contact lines are 44px tap targets on a phone */
+.setup .contact-line .tl{display:inline-flex;align-items:center;min-height:44px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field.wide{grid-column:1/-1}
+.field label{font-size:15px;font-weight:650}
+.field input,.field select,.field textarea{width:100%;min-height:52px;padding:12px 14px;border:1px solid var(--muted);border-radius:6px;background:#FFFFFF;color:var(--ink);font:inherit;font-size:17px;transition:border-color .2s ease,box-shadow .2s ease}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--ink)}
+/* Astra pages review, finding 29: a box's edge is small text's grey (5.9:1 on white), not a pale line.
+   Finding 33: the two needed boxes are marked, and a problem is said under its own box. */
+.req-note{grid-column:1/-1;font-size:15px;color:var(--muted)}
+.field .req{color:var(--blue);font-weight:700}
+.field .err{font-size:15px;font-weight:700;color:var(--ink)}
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border:2px solid var(--ink)}
+.field textarea{min-height:120px;resize:vertical}
+/* bug hunt round 1, "Maybe" 4: the focus ring is clearly visible on white */
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid var(--blue);outline-offset:2px;border-color:var(--ink)}
+.send{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+.send .btn:disabled{opacity:.6;cursor:default}
+.said{font-size:16px;font-weight:600;min-height:1.5em}
+
+@media (max-width:1060px){
+  .demo-in,.price-grid,.setup{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:720px){
+  .form{grid-template-columns:minmax(0,1fr)}
+}
+
+/* the reveal (every page): once per block; blocks on screen at load show at once */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity 640ms var(--ease),transform 640ms var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+.js .rv.now{transition:none}
+
+@media (max-width:980px){
+  .top nav{font-size:15px}
+}
+@media (max-width:720px){
+  .top{height:64px;gap:14px}
+  .top nav{display:none}
+  /* issue 5: the open menu is a panel under the bar, on night blue, and the
+     page behind it is dimmed, so it reads as a menu on top rather than a list
+     covering the headline. The dimmed page is the "outside": a tap there
+     closes the menu and does nothing else (site.js). */
+  .top.open nav{display:flex;flex-direction:column;gap:0;position:absolute;top:100%;left:0;right:0;max-height:calc(100dvh - 64px);overflow-y:auto;background:var(--night);padding:8px var(--pad) 20px;font-family:var(--display);font-size:clamp(26px,7.4vw,34px);font-weight:700;letter-spacing:-.03em;color:var(--on-night);box-shadow:0 0 0 100vmax rgba(7,15,41,.55);animation:menu-in .35s var(--ease)}
+  .top.open nav a{display:flex;align-items:center;min-height:60px;padding:0;border-top:1px solid rgba(255,255,255,.14)}
+  .top.open nav a::after{display:none}
+  .top.open nav a:first-child{border-top:0}
+  .top.open nav a:focus-visible{outline-color:#FFFFFF}
+  .menu{display:inline-flex;align-items:center}
+  .top .btn{padding:0 16px;font-size:15px;height:44px}
+  .mark{font-size:21px}
+  .foot .mark{font-size:18px}
+  .foot nav{margin-left:0;width:100%}
+  .rows li{grid-template-columns:minmax(0,1fr)}
+}
+@keyframes menu-in{from{opacity:0;transform:translateY(-8px)}}
+@media (max-width:380px){
+  .top .mark{font-size:19px;gap:7px}
+  .top .btn{padding:0 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .rv{opacity:1;transform:none;transition:none}
+  .btn,.btn::before,.btn > span,.tl,.tl::after,.top,.mark img,.top nav a::after,.foot nav a::after{transition:none}
+  .top.open nav{animation:none}
+}
+
+/* ---------------------------------------------------------------- sign in
+   The top bar's "Sign in", for customers; on a phone it waits in the footer. */
+.top .signin{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;font-size:16px;font-weight:550;white-space:nowrap;color:var(--muted);transition:color .2s ease}
+.top .signin:hover,.top .signin[aria-current]{color:var(--ink)}
+@media (max-width:720px){.top .signin{display:none}}
+.top nav .in-menu{display:none}
+@media (max-width:720px){.top.open nav .in-menu{display:flex;font-family:var(--text);font-size:18px;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.78)}}
+
+/* the sign-in page: a customer's door and a visitor's, side by side */
+.door{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.door-card{display:grid;gap:18px;padding:clamp(24px,3vw,40px);border:1px solid var(--rule);border-radius:10px;background:var(--card)}
+.door-card h2{font-size:clamp(24px,2.2vw,32px);letter-spacing:-.02em;line-height:1.15;margin:0}
+.door-card p{color:var(--muted);line-height:1.55}
+.door-card .said{color:var(--ink)}
+.door-card .said:empty{min-height:0;margin-top:-18px}
+.door-card p .tl{min-height:0}
+.door-card.quiet{background:transparent}
+.door-go{margin:4px 0}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost::before{background:var(--blue-soft)}
+.btn[disabled]{opacity:.6;cursor:progress}
+@media (max-width:860px){.door{grid-template-columns:minmax(0,1fr)}}

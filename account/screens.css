@@ -1,0 +1,129 @@
+/* screens.css (D2, 30 Sep 2026): the screen-only look of Today, Calls, the
+   call sheet, Calendar and Robot. The shared look (colours, type, .row,
+   .sheet, .note-undo, .mark-urgent) is D1's, in app.css; the rules here that
+   touch those shared classes sit inside :where(), so they weigh nothing and
+   D1's own rules always win. Colours only through the shared custom
+   properties; the second value in each var() is Adithya's own colour, used
+   only until app.css defines the name. */
+
+/* ---------- shared fallbacks (zero weight) ---------- */
+:where(.rows){list-style:none;margin:0;padding:0}
+:where(.rows) > :where(.row){display:flex;align-items:center;gap:var(--space-3,12px);min-height:var(--tap,44px);padding:var(--space-3,12px) 0;box-shadow:inset 0 -1px 0 var(--line,#DCE2EE)}
+:where(.rows) > :where(.row:last-child){box-shadow:none}
+:where(.row-main){flex:1;min-width:0;display:grid;gap:2px;text-align:left;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;min-height:var(--tap,44px);align-content:center}
+:where(div.row-main){cursor:default}
+:where(.row-title){display:flex;align-items:center;flex-wrap:wrap;gap:8px;font:600 17px/1.35 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--ink,#0A1633)}
+:where(.row-sub){font:400 16px/1.4 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--muted,#55617A);overflow-wrap:anywhere}
+:where(.row-end){flex:none;display:flex;align-items:center;gap:8px}
+:where(.row-end.time),:where(.time){font:500 16px/1.4 var(--font-mono,"Plex Mono",ui-monospace,Menlo,monospace);color:var(--muted,#55617A)}
+:where(.mark-urgent){display:inline-block;font:600 16px/22px var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);padding:0 8px;border-radius:999px;background:var(--urgent,#FFE680);color:var(--urgent-ink,#1F2A5C)}
+:where(.note-undo){font-size:16px}
+:where(.link){display:inline-flex;align-items:center;min-height:var(--tap,44px);font:600 16px/1.4 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--accent-ink,var(--accent,#1638C9));text-decoration:underline;text-underline-offset:3px}
+:where(.block){display:grid;gap:var(--space-2,8px);margin:0 0 var(--space-5,32px)}
+:where(.block-top){display:flex;align-items:center;justify-content:space-between;gap:var(--space-3,12px)}
+:where(.block-h){margin:0;font:600 19px/1.3 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif));color:var(--ink,#0A1633);text-transform:none;letter-spacing:0}
+:where(.quiet){color:var(--muted,#55617A)}
+:where(.row-main):focus-visible,:where(.link):focus-visible{outline:3px solid var(--accent,#2B59FF);outline-offset:2px}
+
+
+/* ---------- the row layout on D2's screens (weight of an id, so the old
+   grid rules in app.css cannot stack a row; colours and type stay D1's) ---------- */
+:is(#tab-today,#tab-calls,#tab-calendar,#tab-robot,#sheet) .rows{display:block;margin:0;padding:0;list-style:none}
+:is(#tab-today,#tab-calls,#tab-calendar,#tab-robot,#sheet) .rows>.row{display:flex;flex-direction:row;align-items:center;gap:var(--space-3,12px);margin:0;padding:var(--space-2,8px) 0}
+:is(#tab-today,#tab-calls,#tab-calendar,#tab-robot,#sheet) .row-end .bt{width:auto;flex:none}
+:is(#tab-today,#tab-calls,#tab-calendar,#tab-robot,#sheet) .row-main{display:grid;flex:1;min-width:0}
+
+/* ---------- Today ---------- */
+#tab-today{max-width:760px;margin-inline:auto}
+#tab-today .r75{display:block}
+#tab-today .tile.greet{background:none;padding:0;margin:0 0 var(--space-4,24px)}
+#tab-today .tile.greet .nums{display:none}
+#tab-today [data-greeting]{margin:4px 0 0;text-transform:none;font-stretch:normal;letter-spacing:0;max-width:none;font:600 clamp(24px,5vw,34px)/1.2 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif));color:var(--ink,#0A1633)}
+#tab-today .needs-line{display:block;font-weight:400;color:var(--muted,#55617A);font-size:clamp(19px,3.4vw,24px);margin-top:4px}
+#tab-today [data-today-lists] .col{display:block}
+#tab-today .today-empty{display:grid;gap:var(--space-2,8px);justify-items:start;padding:var(--space-4,24px) 0}
+#tab-today .rows .row-end .bt{min-width:88px;justify-content:center}
+
+@media (prefers-reduced-motion:reduce){
+  #tab-today *,#tab-calls *,#tab-calendar *,#tab-robot *,#sheet *{transition:none!important;animation:none!important}
+}
+
+/* ---------- Calls ---------- */
+#tab-calls{max-width:760px;margin-inline:auto}
+#tab-calls [data-calls]{display:block}
+#tab-calls .block.calls-day{margin:0 0 var(--space-4,24px)}
+#tab-calls .row.done .row-title{font-weight:500}
+#tab-calls .row-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- the call sheet ---------- */
+#sheet #sheet-h{display:flex;align-items:center;flex-wrap:wrap;gap:10px;text-transform:none;font-stretch:normal;letter-spacing:0;font:600 clamp(24px,5vw,30px)/1.2 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif))}
+#sheet #sheet-h .mark-urgent{font-size:16px}
+#sheet .big-call{display:flex;width:100%;min-height:56px;font-size:18px;gap:10px}
+#sheet .big-call .time{color:inherit;font-size:17px;letter-spacing:0}
+#sheet .sentence{margin:0;font:500 19px/1.45 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--ink,#0A1633)}
+#sheet .switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:var(--tap,44px);cursor:pointer;position:relative}
+#sheet .sw-input{position:absolute;opacity:0;width:52px;height:32px;right:0;margin:0;cursor:pointer}
+#sheet .sw-track{flex:none;width:52px;height:32px;border-radius:999px;background:var(--line-3,#55617A);position:relative;transition:background-color .16s ease-out}
+#sheet .sw-knob{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--surface,#FFFFFF);transition:transform .16s ease-out}
+#sheet .sw-input:checked + .sw-track{background:var(--accent,#2B59FF)}
+#sheet .sw-input:checked + .sw-track .sw-knob{transform:translateX(20px)}
+#sheet .sw-input:focus-visible + .sw-track{outline:3px solid var(--accent,#2B59FF);outline-offset:2px}
+#sheet .held{display:grid;gap:8px}
+#sheet .held .row-end{flex-wrap:wrap;justify-content:flex-end}
+
+/* ---------- Calendar ---------- */
+#tab-calendar{max-width:960px;margin-inline:auto}
+#tab-calendar .tile.cnt{display:none}
+#tab-calendar [data-month] .day,#tab-calendar [data-month] .day:hover:not(:disabled){position:relative;background:var(--surface,#FFFFFF);color:var(--ink,#0A1633)}
+#tab-calendar [data-month] .day:disabled{color:var(--muted,#55617A)}
+#tab-calendar [data-month] .day.no{color:var(--muted,#55617A)}
+#tab-calendar [data-month] .day.blocked .n{text-decoration:line-through 2px}
+#tab-calendar [data-month] .day.today{box-shadow:inset 0 0 0 2px var(--accent,#2B59FF)}
+#tab-calendar .dot{display:block;width:8px;height:8px;margin:2px auto 0;border-radius:50%}
+.dot.held{background:var(--accent,#2B59FF)}
+.dot.confirmed{background:var(--ink,#0A1633)}
+.dot.blocked{background:var(--muted,#55617A)}
+#tab-calendar .key .sw.held,#tab-calendar .key .sw.confirmed,#tab-calendar .key .sw.blocked{width:10px;height:10px;border-radius:50%}
+#tab-calendar .key .sw.held{background:var(--accent,#2B59FF)}
+#tab-calendar .key .sw.confirmed{background:var(--ink,#0A1633)}
+#tab-calendar .key .sw.blocked{background:var(--muted,#55617A)}
+#tab-calendar #holds{background:none;padding-inline:0}
+.stat-word{font:600 16px/22px var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--muted,#55617A)}
+.stat-word.held{color:var(--accent-ink,#1638C9)}
+#sheet .rows>.row.hold{flex-wrap:wrap}
+#sheet .rows>.row.hold>.ask{flex-basis:100%}
+#sheet .row-title .stat-word{margin-left:4px}
+#tab-calendar #month-name{text-transform:none;font-stretch:normal;letter-spacing:0;font:600 clamp(22px,4vw,30px)/1.2 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif))}
+#sheet .rows>.row.hold>.row-main{flex-basis:100%}
+#sheet .rows>.row.hold>.row-end{flex-basis:100%;justify-content:flex-start}
+#sheet .rows>.row.hold>.row-end .acts{display:flex;gap:8px;flex-wrap:wrap}
+#sheet .rows>.row.hold>.row-end .bt{flex:none;width:auto}
+
+/* ---------- Robot ---------- */
+#tab-robot{max-width:760px;margin-inline:auto}
+#tab-robot .quiet-top{margin:6px 0 0;font:500 16px/1.4 var(--font-mono,"Plex Mono",ui-monospace,Menlo,monospace);color:var(--muted,#55617A)}
+#tab-robot .r75{display:block}
+#tab-robot .tile.hear{background:none;padding:0;margin:0 0 var(--space-4,24px)}
+#tab-robot .tile.hear .lbl{font:600 16px/1.4 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);text-transform:none;letter-spacing:0;color:var(--muted,#55617A)}
+#tab-robot .hear .quote{font:italic 400 19px/1.45 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);max-width:none;margin:4px 0 0;color:var(--ink,#0A1633)}
+#tab-robot .hear .hint,#tab-robot .hear .upd{display:none}
+#tab-robot #knows .rank{text-transform:none;font-stretch:normal;letter-spacing:0;font:600 19px/1.3 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif))}
+#tab-robot #knows .mut{display:none}
+#tab-robot .fgroups{columns:1;display:block}
+#tab-robot .fgroup.shut{background:none;padding:0;margin:0;box-shadow:inset 0 -1px 0 var(--line,#DCE2EE);border-radius:0}
+#tab-robot .fgroup.shut .gtog{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;width:100%;min-height:var(--tap,44px);padding:var(--space-3,12px) 0;text-align:left;background:none;border:0;cursor:pointer;font:inherit;color:inherit}
+#tab-robot .fgroup .gtog .rank{grid-column:1;text-transform:none;font-stretch:normal;letter-spacing:0;font:600 17px/1.35 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--ink,#0A1633)}
+#tab-robot .fgroup .gtog .gsum{grid-column:1;font:400 16px/1.4 var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif);color:var(--muted,#55617A);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tab-robot .fgroup .gtog .chev{grid-column:2;grid-row:1 / span 2}
+#tab-robot .fgroup .rowsay{margin:0 0 8px}
+#tab-robot .fgroup.editing{align-content:start;position:fixed;z-index:31;left:0;right:0;bottom:0;max-height:88vh;max-height:88dvh;overflow:auto;overscroll-behavior:contain;margin:0;border-radius:var(--radius,8px) var(--radius,8px) 0 0;background:var(--surface,#FFFFFF);padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+#tab-robot .fgroup.editing .gtog{display:block;width:100%;text-align:left;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+#tab-robot .fgroup.editing .gtog .rank{font:600 22px/1.25 var(--font-display,var(--font-body,"Archivo",ui-sans-serif,system-ui,sans-serif));text-transform:none;font-stretch:normal;letter-spacing:0}
+#tab-robot .fgroup.editing .gsum,#tab-robot .fgroup.editing .chev,#tab-robot .fgroup.editing .rowsay{display:none}
+#tab-robot .fgroup.editing .acts{display:flex;gap:8px;flex-wrap:wrap}
+#tab-robot .fgroup.editing .acts .bt{flex:1 1 0;width:auto}
+#tab-robot .robot-scrim{position:fixed;inset:0;z-index:30;background:color-mix(in srgb,var(--ink,#0A1633) 45%,transparent)}
+@media (min-width:861px){
+  #tab-robot .fgroup.editing{left:auto;top:0;width:min(480px,44vw);max-height:none;border-radius:0;padding:24px 28px}
+}
+#tab-calendar .key .sw.no{font-size:16px;line-height:18px;width:auto;min-width:18px}

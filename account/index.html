@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Your account · Aivorlabs</title>
+<link rel="icon" type="image/png" href="/eivor-account-demo/assets/img/logo-ink.png">
+<link rel="preload" href="/eivor-account-demo/assets/fonts/Archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/eivor-account-demo/assets/css/site.css">
+<link rel="stylesheet" href="/eivor-account-demo/account/app.css">
+<link rel="stylesheet" href="/eivor-account-demo/account/screens.css">
+<link rel="stylesheet" href="/eivor-account-demo/account/pop.css">
+<link rel="manifest" href="/eivor-account-demo/account/manifest.webmanifest">
+<meta name="theme-color" content="#DCE2EE">
+<link rel="apple-touch-icon" href="/eivor-account-demo/account/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>document.documentElement.className = "js";</script>
+</head>
+<!--
+  The owner's app (OWNER-SPEC.md; O2 made it work on the contract, O4a gives it
+  Confidence's design system in the site's colours). Unlisted: only his own
+  page links here, and the robots tag keeps it out of search. O4b adds Calendar,
+  Robot and Profile in the same system, and the home-screen manifest and icons.
+  Signed out: only the sign-in. First sign-in: a short setup, one step a screen,
+  starting with his own password. Signed in: five tabs (Today, Calls, Calendar,
+  Robot, Settings) on hash routes, filled in by app.js from the contract's routes
+  (/api/account/*, /api/owner/*). Nothing private is written into this file.
+  D1 (30 Sep 2026): the calmer look from Adithya's redesign, the line pill in
+  the header, the tabs at the bottom on a phone, Settings (was Profile; its
+  route stays #profile), and the sign-in as one centred card.
+-->
+<body class="oa">
+
+<header class="hd">
+  <a class="mk" href="/eivor-account-demo/" aria-label="Aivorlabs home"><img src="/eivor-account-demo/assets/img/logo-ink-tight.png" alt="" width="22" height="22"></a>
+  <h1 class="co" id="company" tabindex="-1" data-company>Your account</h1>
+  <nav class="seg" aria-label="Main" data-tabs hidden>
+    <a href="#today" data-to="today"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/></svg><span>Today</span></a><a href="#calls" data-to="calls"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5h3l1.6 4-2 1.3a11 11 0 0 0 5.9 5.9l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg><span>Calls</span></a><a href="#calendar" data-to="calendar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Calendar</span></a><a href="#robot" data-to="robot"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="12" rx="3"/><path d="M12 7.5V4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg><span>Robot</span></a><a href="#profile" data-to="profile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></a>
+  </nav>
+  <button class="kbar" type="button" data-cmdk aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Jump to</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+  <button class="pill line-now" type="button" data-line-now hidden></button>
+  <div class="who" data-side-who hidden><span class="av" aria-hidden="true" data-side-initials></span><span class="who-n" data-side-name></span><button class="bt q" type="button" data-side-signout>Sign out</button></div>
+</header>
+
+<main id="main">
+
+<section class="view" id="opening" aria-label="Opening">
+  <div class="tile big opening">
+    <p class="lbl">Your account</p>
+    <p class="lede" id="opening-text">Opening your account.</p>
+    <span class="skel s1" aria-hidden="true"></span><span class="skel s2" aria-hidden="true"></span><span class="skel s3" aria-hidden="true"></span>
+    <noscript><p class="lede">This page needs JavaScript turned on to sign you in.</p></noscript>
+  </div>
+</section>
+
+<!-- Signed out: only this, one centred card -->
+<section class="view" id="signin" aria-labelledby="signin-h" hidden>
+  <div class="si-art" data-si-art>
+    <p class="si-kick" data-in>Your phone line, run from here</p>
+    <p class="si-h" data-chars aria-hidden="false">Every call answered. Every date yours.</p>
+    <p class="si-sub" data-in>Sign in to see who called, which dates your robot is holding, and what it tells callers.</p>
+    <div class="si-card" data-in aria-hidden="true">
+      <div class="si-live"><span class="si-voice"><i></i><i></i><i></i><i></i><i></i></span><div><b>On a call now</b><span>Two-bedroom move, Renton to Kent</span></div><time data-si-clock>0:43</time></div>
+      <ul class="si-calls">
+        <li><time>9:12 PM</time><div><b>Dana</b><span>Wants Thu 8 Oct</span></div><em>Date held</em></li>
+        <li><time>7:40 PM</time><div><b>Marcus</b><span>Movers did not show up</span></div><em><i class="urg">Urgent</i></em></li>
+        <li><time>6:05 PM</time><div><b>Priya</b><span>Quote for a one-bedroom</span></div><em>Called back</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="card-c">
+    <p class="card-mark"><img src="/eivor-account-demo/assets/img/logo-ink-tight.png" alt="" width="32" height="32">Aivorlabs</p>
+    <h2 class="h2" id="signin-h">Sign in to your account</h2>
+    <p class="lede">Your calls, your held dates and what your robot knows.</p>
+    <form class="fm" id="signin-form" novalidate>
+      <label for="si-email">Email</label>
+      <input id="si-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
+      <label for="si-password">Password</label>
+      <input id="si-password" name="password" type="password" autocomplete="current-password" required>
+      <p class="say" id="si-say" role="status" aria-live="polite" hidden></p>
+      <div class="acts stretch"><button class="bt p" type="submit">Sign in</button></div>
+    </form>
+    <p class="hint">Forgot your password? <a class="tl" href="mailto:hello@example.com">Email Ethan.</a></p>
+    <p class="back"><a class="tl" href="/eivor-account-demo/" data-back>Back to Aivorlabs</a></p>
+  </div>
+</section>
+
+<!-- Signed in the first time (and from Settings): the setup, one step a screen -->
+<section class="view" id="setup" aria-labelledby="setup-h" hidden>
+  <div class="tile prog">
+    <p class="lbl ink" id="setup-h" data-step-label>Step 1 of 5</p>
+    <div class="bar" role="progressbar" aria-labelledby="setup-h" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" data-step-bar><i></i></div>
+  </div>
+
+  <div class="tile big step" id="choose" data-step="password" hidden>
+    <p class="lbl">Your password</p>
+    <h2 class="h2" id="choose-h" tabindex="-1">Choose your own password</h2>
+    <p class="lede">The first password was only to get you in. Choose one only you know, at least 10 characters.</p>
+    <form class="fm grow" id="choose-form" novalidate>
+      <div id="ch-current-wrap">
+        <label for="ch-current">The password you signed in with</label>
+        <input id="ch-current" name="current" type="password" autocomplete="current-password">
+      </div>
+      <label for="ch-next">New password</label>
+      <input id="ch-next" name="next" type="password" autocomplete="new-password" minlength="10" required aria-describedby="ch-hint">
+      <p class="hint" id="ch-hint">At least 10 characters.</p>
+      <label for="ch-again">New password again</label>
+      <input id="ch-again" name="again" type="password" autocomplete="new-password" minlength="10" required>
+      <p class="say" id="ch-say" role="status" aria-live="polite" hidden></p>
+      <div class="acts end"><button class="bt p" type="submit">Save my password</button></div>
+    </form>
+  </div>
+
+  <div class="tile big step" data-step="forward" hidden>
+    <p class="lbl">Your cell</p>
+    <h2 class="h2" id="forward-h" tabindex="-1">Send the calls you miss to your robot</h2>
+    <p class="lede">Your cell still rings first. The calls you do not answer go to your robot. Pick your carrier.</p>
+    <div class="grow">
+      <fieldset class="choices" data-carriers>
+        <legend class="sr-only">Your carrier</legend>
+        <label class="choice"><input type="radio" name="carrier" value="verizon"><span class="rank">Verizon</span><span class="ix" aria-hidden="true">A</span></label>
+        <label class="choice"><input type="radio" name="carrier" value="tmobile"><span class="rank">T-Mobile</span><span class="ix" aria-hidden="true">B</span></label>
+        <label class="choice"><input type="radio" name="carrier" value="att"><span class="rank">AT&amp;T</span><span class="ix" aria-hidden="true">C</span></label>
+        <label class="choice"><input type="radio" name="carrier" value="other"><span class="rank">Another carrier</span><span class="ix" aria-hidden="true">D</span></label>
+      </fieldset>
+      <div data-forward-code hidden></div>
+    </div>
+    <div class="acts split"><button class="bt q" type="button" data-step-back>Back</button><span class="acts"><button class="bt q" type="button" data-step-skip>Skip setup</button><button class="bt p" type="button" data-step-next>Next</button></span></div>
+  </div>
+
+  <div class="tile big step" data-step="calendar" hidden>
+    <p class="lbl">Your calendar</p>
+    <h2 class="h2" id="calendar-step-h" tabindex="-1">Add your held dates to your phone’s calendar</h2>
+    <p class="lede">Every date your robot holds shows in your own private calendar. Keep the link to yourself: anyone with it can see the holds.</p>
+    <div class="grow">
+      <label class="fl" for="setup-cal-url">Your private calendar link</label>
+      <div class="copy-row">
+        <input id="setup-cal-url" type="text" readonly data-calendar-url-setup>
+        <button class="bt s" type="button" data-copy-setup>Copy</button>
+      </div>
+      <p class="say" data-copy-setup-say role="status" aria-live="polite" hidden></p>
+      <div class="r2 two-os">
+        <div>
+          <p class="rank">iPhone</p>
+          <ol class="steps-l">
+            <li>Open the Calendar app. Tap Calendars at the bottom.</li>
+            <li>Tap Add Calendar, then Add Subscription Calendar.</li>
+            <li>Paste your link and tap Find, then Add.</li>
+          </ol>
+        </div>
+        <div>
+          <p class="rank">Android</p>
+          <ol class="steps-l">
+            <li>In Chrome, open your calendar’s website and sign in (menu, Desktop site).</li>
+            <li>Next to Other calendars, tap +, then From URL.</li>
+            <li>Paste your link and tap Add calendar. It shows on your phone.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="acts split"><button class="bt q" type="button" data-step-back>Back</button><span class="acts"><button class="bt q" type="button" data-step-skip>Skip setup</button><button class="bt p" type="button" data-step-next>Next</button></span></div>
+  </div>
+
+  <div class="tile big step" data-step="test" hidden>
+    <p class="lbl">Try it</p>
+    <h2 class="h2" id="test-h" tabindex="-1">Call your cell from another phone and let it ring</h2>
+    <p class="lede">Do not answer. After a few rings your robot picks up. Tell it you need a move, give a name and a number, and hang up.</p>
+    <div class="grow">
+      <ol class="steps-l big-steps">
+        <li>Your robot answers in your company’s name.</li>
+        <li>The call shows in Calls a minute after you hang up.</li>
+        <li>The email with the caller’s details comes at the same time.</li>
+      </ol>
+    </div>
+    <div class="acts split"><button class="bt q" type="button" data-step-back>Back</button><span class="acts"><button class="bt q" type="button" data-step-skip>Skip setup</button><button class="bt p" type="button" data-step-next>Next</button></span></div>
+  </div>
+
+  <div class="tile big step" data-step="done" hidden>
+    <p class="lbl">Done</p>
+    <h2 class="h2" id="done-h" tabindex="-1">Your line is ready</h2>
+    <p class="lede">Today shows what needs you first. Calls has every caller. The forwarding codes and your calendar link are in Settings.</p>
+    <div class="grow"></div>
+    <div class="acts split"><button class="bt q" type="button" data-step-back>Back</button><button class="bt p" type="button" data-step-finish>Open Today</button></div>
+  </div>
+</section>
+
+<!-- Signed in: the app -->
+<div class="view" id="account" hidden>
+  <div class="tile" data-fixture hidden><p class="lbl ink">Sample data from the fixture. Nothing here is real.</p></div>
+  <p class="say off-note" data-offline role="status" aria-live="polite" hidden></p>
+  <p class="say" data-pill-say role="status" aria-live="polite" hidden></p>
+  <div class="tile paused-t" data-paused-flag hidden>
+    <div class="acts split"><p><strong>Your line is paused.</strong> It holds no dates until you turn it back on.</p><button class="bt s" type="button" data-unpause>Turn answering back on</button></div>
+  </div>
+
+  <!-- TODAY: built by today.js (O4b: a data row across the width, as Confidence's dashboard) -->
+  <section data-tab="today" id="tab-today" aria-labelledby="today-h" hidden>
+    <div class="r75 stretch">
+      <div class="tile greet">
+        <div class="upd top"><p class="lbl" data-today-date></p></div>
+        <h2 class="h2" id="today-h" data-greeting></h2>
+        <p class="lede" data-today-line></p>
+        <div class="nums" data-today-facts></div>
+      </div>
+      <div class="tile line-t">
+        <div class="acts split"><p class="lbl">Your line</p><p class="data" data-line-number></p></div>
+        <p class="stat" data-line-word></p>
+        <p id="today-pause-what" data-pause-sentence></p>
+        <div class="acts"><button class="bt s" type="button" id="today-pause" data-today-pause></button></div>
+        <p class="say" data-today-pause-say role="status" aria-live="polite" hidden></p>
+      </div>
+    </div>
+    <div data-today-empty hidden></div>
+    <div class="r75" data-today-lists>
+      <div class="col"><div class="col" data-today-urgent></div><div class="col" data-today-latest></div></div>
+      <div class="col" data-today-holds></div>
+    </div>
+  </section>
+
+  <!-- CALLS: built by calls.js -->
+  <section data-tab="calls" id="tab-calls" aria-labelledby="calls-h" hidden>
+    <div class="shd"><h2 class="h2" id="calls-h">Calls</h2><p class="lede">Newest first. Tap a call to see everything the caller said.</p></div>
+    <div class="chips" role="group" aria-label="Show" data-filters>
+      <button class="fchip" type="button" data-filter="all" aria-pressed="true">All <span class="n" data-n="all"></span></button>
+      <button class="fchip" type="button" data-filter="urgent" aria-pressed="false">Urgent <span class="n" data-n="urgent"></span></button>
+      <button class="fchip" type="button" data-filter="open" aria-pressed="false">Not called back <span class="n" data-n="open"></span></button>
+    </div>
+    <div class="groups" data-calls></div>
+    <div data-calls-empty hidden></div>
+  </section>
+
+  <!-- CALENDAR: built by calendar.js (O4b): the month, the day sheet, the coming dates, the link -->
+  <section data-tab="calendar" id="tab-calendar" aria-labelledby="calendar-tab-h" hidden>
+    <div class="shd"><h2 class="h2" id="calendar-tab-h">Calendar</h2><p class="lede">Tap a day to confirm or release its hold, or to block it when you are busy or off.</p></div>
+    <div class="r75 calr">
+      <div class="col">
+        <div class="tile cal" id="days" aria-labelledby="month-name">
+          <div class="month-bar">
+            <h3 class="h2" id="month-name" aria-live="polite"></h3>
+            <div class="acts">
+              <button class="bt q" type="button" data-month-prev aria-label="Previous month">Prev</button>
+              <button class="bt q" type="button" data-month-today hidden>This month</button>
+              <button class="bt q" type="button" data-month-next aria-label="Next month">Next</button>
+            </div>
+          </div>
+          <div class="month" role="group" aria-labelledby="month-name">
+            <div class="wk" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            <div class="grid" data-month></div>
+          </div>
+          <ul class="key" aria-label="What the marks mean">
+            <li><span class="sw held" aria-hidden="true"></span>Held</li>
+            <li><span class="sw confirmed" aria-hidden="true"></span>Confirmed</li>
+            <li><span class="sw blocked" aria-hidden="true"></span>Blocked</li>
+            <li><span class="sw no" aria-hidden="true">9</span>Not offered</li>
+            <li><span class="sw today" aria-hidden="true"></span>Today</li>
+          </ul>
+          <p class="say" data-days-say role="status" aria-live="polite" hidden></p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="tile cnt" aria-labelledby="counts-h">
+          <h3 class="lbl ink" id="counts-h" data-counts-h>This month</h3>
+          <div class="r3 kvn" data-counts></div>
+        </div>
+      </div>
+    </div>
+    <div class="tile list" id="holds" aria-labelledby="holds-h">
+          <div class="grp acts split"><h3 class="lbl ink" id="holds-h" tabindex="-1">Coming up</h3><p class="mut">Held and confirmed dates</p></div>
+          <p class="hint grp">A held date is kept for the caller until you confirm it with them or release it.</p>
+          <div class="grp" data-holds-empty hidden><p class="lede">No held or confirmed dates coming up.</p></div>
+          <ol class="alt" data-holds></ol>
+        </div>
+  </section>
+
+  <!-- ROBOT: built by robot.js (O4b): what callers hear, the pause, what the robot knows in groups -->
+  <section data-tab="robot" id="tab-robot" aria-labelledby="robot-tab-h" hidden>
+    <div class="shd"><h2 class="h2" id="robot-tab-h">Your robot</h2><p class="lede">What it says and knows. Save one group at a time.</p></div>
+    <div class="r75 stretch">
+      <div class="tile hear" aria-labelledby="hear-h">
+        <h3 class="lbl" id="hear-h">What callers hear first</h3>
+        <p class="quote" data-greeting-preview></p>
+        <p class="hint">Made from your company name. Save a new name under Your company and this changes with it.</p>
+        <div class="upd">
+          <p class="data" data-robot-updated></p>
+          <p class="hint">Changes reach your robot within about 10 minutes.</p>
+        </div>
+      </div>
+      <div class="tile" id="pause" aria-labelledby="pause-h">
+        <h3 class="lbl ink" id="pause-h">Pause the line</h3>
+        <button class="switch" type="button" role="switch" aria-checked="false" id="pause-switch" aria-labelledby="pause-h" aria-describedby="pause-what"><span class="track" aria-hidden="true"><span class="knob"></span></span><span class="sw-text" data-pause-text>Off</span></button>
+        <p id="pause-what">While the line is paused, your robot still answers every call, takes the caller’s name, number and what they need, holds no date, and tells them you will call back.</p>
+        <p class="say" data-pause-say role="status" aria-live="polite" hidden></p>
+      </div>
+    </div>
+    <div class="shd sm" id="knows" aria-labelledby="knows-h"><h3 class="rank" id="knows-h">What your robot knows</h3><p class="mut">Each group saves on its own.</p></div>
+    <div class="fgroups" data-fact-groups></div>
+  </section>
+
+  <!-- SETTINGS (was Profile; D1): short sections, each a list of rows; built by profile.js -->
+  <section data-tab="profile" id="tab-profile" aria-labelledby="profile-tab-h" hidden>
+    <div class="shd"><h2 class="h2" id="profile-tab-h">Settings</h2><p class="lede" data-who></p></div>
+    <div class="set">
+      <section class="set-s" id="details" aria-labelledby="profile-h">
+        <h3 class="set-h" id="profile-h">You</h3>
+        <form class="fm" id="profile-form" novalidate>
+          <label for="p-name">Your name</label>
+          <input id="p-name" name="name" type="text" autocomplete="name">
+          <label for="p-cell">Your cell, for urgent calls</label>
+          <input id="p-cell" name="cell" type="tel" autocomplete="tel" aria-describedby="p-cell-hint">
+          <p class="hint" id="p-cell-hint">The number an urgent caller is told you will call back from.</p>
+          <label for="p-noticeEmail">Email for call notices</label>
+          <input id="p-noticeEmail" name="noticeEmail" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" aria-describedby="p-mail-hint">
+          <p class="hint" id="p-mail-hint">Every call your robot takes is emailed here.</p>
+          <p class="say" id="profile-say" role="status" aria-live="polite" hidden></p>
+          <div class="acts"><button class="bt p" type="submit">Save</button></div>
+        </form>
+      </section>
+
+      <section class="set-s" id="line-no" aria-labelledby="line-no-h">
+        <h3 class="set-h" id="line-no-h">Your line</h3>
+        <div data-profile-number></div>
+        <div class="row">
+          <span><span class="row-title">Forwarding codes</span><span class="row-sub">The codes that send the calls you miss on your cell to your robot.</span></span>
+          <span class="row-end"><a class="bt s" href="#setup-forward" data-setup-again>Show the codes</a></span>
+        </div>
+      </section>
+
+      <section class="set-s" id="security" aria-labelledby="security-h">
+        <h3 class="set-h" id="security-h">Security</h3>
+        <form class="fm" id="password-form" novalidate aria-labelledby="password-h">
+          <p class="row-title" id="password-h">Change your password</p>
+          <label for="pw-current">Current password</label>
+          <input id="pw-current" name="current" type="password" autocomplete="current-password">
+          <label for="pw-next">New password</label>
+          <input id="pw-next" name="next" type="password" autocomplete="new-password" minlength="10" aria-describedby="pw-hint">
+          <p class="hint" id="pw-hint">At least 10 characters.</p>
+          <p class="say" id="password-say" role="status" aria-live="polite" hidden></p>
+          <div class="acts"><button class="bt s" type="submit">Change password</button></div>
+        </form>
+        <div class="row">
+          <span><span class="row-title">Sign out everywhere</span><span class="row-sub" id="all-what">Signs you out on every phone and computer.</span></span>
+          <span class="row-end"><button class="bt s" type="button" data-signout-all aria-describedby="all-what">Sign out everywhere</button></span>
+        </div>
+        <div class="ask" role="group" aria-labelledby="all-q" data-all-ask hidden>
+          <p id="all-q">Sign out on every phone and computer?</p>
+          <p>You sign in again with your password on each one, this one too.</p>
+          <div class="acts"><button class="bt s" type="button" id="all-yes">Yes, sign out everywhere</button><button class="bt q" type="button" id="all-no">Stay signed in</button></div>
+        </div>
+      </section>
+
+      <section class="set-s" id="on-phone" aria-labelledby="phone-h">
+        <h3 class="set-h" id="phone-h">On your phone</h3>
+        <details class="fold" id="home-screen">
+          <summary class="row"><span><span class="row-title" id="home-h">Home-screen icon</span><span class="row-sub">Open your account with one tap, like an app.</span></span><span class="row-end"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="fold-in">
+          <div class="hs-top">
+            <img class="hs-icon" src="/eivor-account-demo/account/icons/icon-192.png" alt="" width="56" height="56">
+            <p>Add it once and it opens like an app.</p>
+          </div>
+          <p class="say good" data-installed hidden>This account is on your home screen.</p>
+          <div class="acts" data-install-now hidden><button class="bt s" type="button" data-install>Add it now</button></div>
+          <div class="os-steps">
+            <div>
+              <p class="rank">iPhone</p>
+              <ol class="steps-l">
+                <li>Open this page in Safari.</li>
+                <li>Tap Share, the square with the arrow up.</li>
+                <li>Tap Add to Home Screen, then Add.</li>
+              </ol>
+            </div>
+            <div>
+              <p class="rank">Android</p>
+              <ol class="steps-l">
+                <li>Open this page in Chrome.</li>
+                <li>Tap the menu, the three dots at the top right.</li>
+                <li>Tap Add to Home screen or Install app, then Add.</li>
+              </ol>
+            </div>
+          </div>
+          </div>
+        </details>
+        <details class="fold" id="cal-link">
+          <summary class="row"><span><span class="row-title" id="calendar-h">Calendar link</span><span class="row-sub">Every date your robot holds, in your phone’s own calendar.</span></span><span class="row-end"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="fold-in">
+          <p>Keep the link to yourself: anyone with it can see the holds.</p>
+          <label class="fl" for="cal-url">Your private calendar link</label>
+          <div class="copy-row">
+            <input id="cal-url" type="text" readonly data-calendar-url>
+            <button class="bt s" type="button" data-copy>Copy</button>
+          </div>
+          <p class="say" data-copy-say role="status" aria-live="polite" hidden></p>
+          <div class="os-steps">
+            <div>
+              <p class="rank">iPhone</p>
+              <ol class="steps-l">
+                <li>Open the Calendar app. Tap Calendars at the bottom.</li>
+                <li>Tap Add Calendar, then Add Subscription Calendar.</li>
+                <li>Paste your link and tap Find, then Add.</li>
+              </ol>
+            </div>
+            <div>
+              <p class="rank">Android</p>
+              <ol class="steps-l">
+                <li>In Chrome, open your calendar’s website and sign in (menu, Desktop site).</li>
+                <li>Next to Other calendars, tap +, then From URL.</li>
+                <li>Paste your link and tap Add calendar. It shows on your phone.</li>
+              </ol>
+            </div>
+          </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="set-s" id="help" aria-labelledby="help-h">
+        <h3 class="set-h" id="help-h">Help</h3>
+        <div class="row">
+          <span><span class="row-title">Email Ethan</span><span class="row-sub">Something not right, or a question about your line? He answers the same day. <a class="tl" href="mailto:hello@example.com">hello@example.com</a></span></span>
+        </div>
+      </section>
+
+      <div class="set-out" id="signout-t">
+        <button class="bt s" type="button" data-signout>Sign out</button>
+        <p class="say" data-signout-say role="status" aria-live="polite" hidden></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<nav class="bbar" aria-label="Main" data-tabs hidden>
+  <div class="seg"><a href="#today" data-to="today"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/></svg><span>Today</span></a><a href="#calls" data-to="calls"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5h3l1.6 4-2 1.3a11 11 0 0 0 5.9 5.9l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg><span>Calls</span></a><a href="#calendar" data-to="calendar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Calendar</span></a><a href="#robot" data-to="robot"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="12" rx="3"/><path d="M12 7.5V4M9 13h.01M15 13h.01M9.5 16.5h5"/></svg><span>Robot</span></a><a href="#profile" data-to="profile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></a></div>
+</nav>
+
+<!-- one call, everything the caller said (6.20: a sheet on phones, a side panel on wide screens) -->
+<div class="scrim" data-scrim hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h" hidden>
+  <div class="top-row"><p class="lbl" data-sheet-when></p><button class="bt q" type="button" data-sheet-close>Close</button></div>
+  <h2 class="h2" id="sheet-h" tabindex="-1"></h2>
+  <div class="sheet-body" data-sheet-body></div>
+</div>
+
+<script src="/eivor-account-demo/assets/vendor/gsap.min.js"></script>
+<script src="/eivor-account-demo/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="/eivor-account-demo/assets/vendor/SplitText.min.js"></script>
+<script src="/eivor-account-demo/assets/vendor/lenis.min.js"></script>
+<script type="module" src="/eivor-account-demo/account/app.js"></script>
+<script type="module" src="/eivor-account-demo/account/motion.js"></script>
+</body>
+</html>
